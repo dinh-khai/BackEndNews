@@ -23,11 +23,11 @@ public interface NewsService {
 
 //	save news
 	News saveNews(String title,String description,int cateId,int classifyId
-				 ,boolean featured,MultipartFile file,String forder,String defaultImage);
+				 ,boolean featured,MultipartFile file,String serverName,int port);
 	
 //	update news
 	void updateNews(long id,String title,String description,int cateId,int classifyId
-			 ,boolean featured,MultipartFile file,String forder,String defaultImage);
+			 ,boolean featured,MultipartFile file,String serverName,int port);
 
 // delete news
 	void deleteNews(long id);

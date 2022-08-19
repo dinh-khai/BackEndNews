@@ -1,11 +1,14 @@
 package com.news.controller.user;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,9 +56,12 @@ public class TestControl {
 		System.out.println(user.getFullName());
 		return;
 	}
-	@PostMapping("/a")
-	public void te(@RequestParam String des) {
-		System.out.println(des);
+	@GetMapping("/a")
+	public void te(HttpServletRequest request) {
+		System.out.println(request.getRequestURL());
+		System.out.println(request.getProtocol());
+		System.out.println(request.getServerPort());
+		System.out.println(request.getServerName());
 		return;
 	}
 }

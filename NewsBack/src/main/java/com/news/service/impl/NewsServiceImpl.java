@@ -47,12 +47,12 @@ public class NewsServiceImpl implements NewsService{
 
 	@Override
 	public News saveNews(String title, String description, int cateId, int classifyId,
-			boolean featured, MultipartFile file, String forder, String defaultImage) {
+			boolean featured, MultipartFile file,String serverName,int port) {
 		News news=new News();
 		news.setTime(Calendar.getInstance().getTime());
 		news.setTitle(title);
 		news.setDescription(description);
-		news.setImage(upload.upload(file, forder, defaultImage));
+		news.setImage(upload.upload(file, "news", null,serverName, port));
 		news.setCategory(cateRepos.findById(cateId).orElse(null));
 		news.setClassify(classifyRepos.findById(classifyId).orElse(null));
 		news.setViews(0);
@@ -63,10 +63,10 @@ public class NewsServiceImpl implements NewsService{
 
 	@Override
 	public void updateNews(long id, String title, String description, int cateId, int classifyId, boolean featured,
-			MultipartFile file, String forder, String defaultImage) {
+			MultipartFile file,String serverName,int port) {
 		News news = newsRepos.findById(id).orElse(null);
 		if(news==null) return;
-		String imageURL=upload.upload(file, forder, defaultImage);
+		String imageURL=upload.upload(file, "news", null,serverName,port);
 		news.setTitle(title);
 		news.setDescription(description);
 		if(imageURL!=null) {

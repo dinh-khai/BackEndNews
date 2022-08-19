@@ -1,7 +1,8 @@
 package com.news.controller.user;
 
-
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,27 +25,29 @@ import com.news.service.UserService;
 public class UserController {
 	@Autowired
 	UserService uService;
-	
+
 	@PostMapping("/register")
-	public String saveUser(@RequestParam String userName,@RequestParam String fullName,
-			@RequestParam String password,@RequestParam String email,@RequestParam(required = false) MultipartFile file) {
-		return uService.save(userName, fullName, password, email, file, "user","http://localhost:8080/image/macdinh.png");
+	public String saveUser(HttpServletRequest request, @RequestParam String userName, @RequestParam String fullName,
+			@RequestParam String password, @RequestParam String email,
+			@RequestParam(required = false) MultipartFile file) {
+		return uService.save(userName, fullName, password, email, file
+								,request.getServerName(), request.getServerPort());
 	}
-	
+
 	@PostMapping("/login")
-	public User login(@RequestParam String userName,@RequestParam String password) throws Exception {
+	public User login(@RequestParam String userName, @RequestParam String password) throws Exception {
 		return uService.getUser(userName, password);
 	}
-	
+
 	@GetMapping("/user/all")
-	public List<User> all(){
+	public List<User> all() {
 		return uService.findAll();
 	}
-	
+
 	@PutMapping("/user/changePass")
 	public void changePass(@RequestBody ChangePass changePass) {
 		uService.updateUser(changePass.getPassword(), changePass.getUserName());
 		return;
 	}
-	
+
 }

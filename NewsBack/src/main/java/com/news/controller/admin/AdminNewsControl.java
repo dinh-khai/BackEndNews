@@ -1,5 +1,7 @@
 package com.news.controller.admin;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,10 +29,10 @@ public class AdminNewsControl {
 	MoreDescriptionService desService;
 	
 	@PostMapping("/news/save")
-	public News save(@RequestParam String title,@RequestParam String description,
+	public News save(HttpServletRequest request,@RequestParam String title,@RequestParam String description,
 			@RequestParam int cateId,@RequestParam int classifyId,
 			@RequestParam boolean featured,@RequestParam(required = false) MultipartFile file) {
-		return newsService.saveNews(title, description, cateId, classifyId, featured, file, "news", null);
+		return newsService.saveNews(title, description, cateId, classifyId, featured, file,request.getServerName(),request.getServerPort());
 		
 	}
 	
@@ -39,13 +41,12 @@ public class AdminNewsControl {
 		desService.save(des);
 		return;
 	}
-	
-	
+
 	@PutMapping("/news/update")
-	public void update(@RequestParam long id, @RequestParam String title,@RequestParam String description,
+	public void update(HttpServletRequest request,@RequestParam long id, @RequestParam String title,@RequestParam String description,
 			@RequestParam int cateId,@RequestParam int classifyId,
 			@RequestParam boolean featured,@RequestParam MultipartFile file) {
-		newsService.updateNews(id,title, description, cateId, classifyId, featured, file, "news", null);
+		newsService.updateNews(id,title, description, cateId, classifyId, featured, file,request.getServerName(),request.getServerPort());
 		return;
 	}
 	

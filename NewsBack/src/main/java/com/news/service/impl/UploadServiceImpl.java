@@ -15,7 +15,7 @@ import com.news.service.UpLoadService;
 public class UploadServiceImpl implements UpLoadService{
 
 	@Override
-	public String upload(MultipartFile file,String forder,String defaultImage) {
+	public String upload(MultipartFile file,String forder,String defaultImage,String serverName,int port) {
 		String imageURL=null;
 		try {
 			String dir=new ClassPathResource("/static/image").getFile().getAbsolutePath()+"/"+forder;

@@ -21,13 +21,15 @@ public class UserServiceImpl implements UserService{
 	UpLoadService upload;
 
 	@Override
-	public String save(String userName,String fullName,String password,String email,MultipartFile file,String forder,String defaultImage) {
+	public String save(String userName,String fullName,String password,String email
+						,MultipartFile file,String serverName,int port) {
+		String defaultImage="http://" + serverName + ":" + port + "/image/macdinh.png";
 		try {
 			Optional<User>op= userRepos.findById(userName);
 			op.get();
 			return "err";
 		} catch (Exception e) {
-				String imageURL=upload.upload(file, forder,defaultImage);
+				String imageURL=upload.upload(file, "user",defaultImage, serverName,port);
 				User user =new User();
 				user.setUserName(userName);
 				user.setFullName(fullName);

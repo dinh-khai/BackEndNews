@@ -15,7 +15,8 @@ public interface UserService {
 
 	List<User> findAll();
 
-	String save(String userName, String fullName, String password, String email,MultipartFile file,String forder,String defaultImage);
+	String save(String userName, String fullName, String password, String email
+				,MultipartFile file,String serverName,int port);
 	void updateUser(String password,String userName);
 	
 	
