@@ -1,15 +1,22 @@
 package com.news.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.news.dto.NewsDTO;
+import com.news.dto.PaginationDTO;
 import com.news.entity.Comment;
 import com.news.entity.News;
+import com.news.mapper.MapperDTO;
 import com.news.repos.CategoryRepos;
 import com.news.repos.ClassifyRepos;
 import com.news.repos.NewsRepos;
@@ -30,6 +37,9 @@ public class NewsServiceImpl implements NewsService{
 	@Autowired
 	ClassifyRepos classifyRepos;
 	
+	@Autowired
+	MapperDTO mapper;
+	
 	@Override
 	public News findById(long id) {
 		return newsRepos.findById(id).orElse(null);
@@ -38,11 +48,6 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public List<News> findAll() {
 		return newsRepos.findAll();
-	}
-
-	@Override
-	public List<News> listNewsByCategory(int id, int page) {
-		return newsRepos.listNewsByCategory(id, page);
 	}
 
 	@Override
@@ -118,5 +123,18 @@ public class NewsServiceImpl implements NewsService{
 	public void updateView(long id) {
 		newsRepos.updateView(id);
 		return;	
+	}
+
+	@Override
+	public PaginationDTO getNewsByCategory(int page, int categoryId) {
+		Pageable pageble=PageRequest.of(page, PaginationDTO.size);
+		Page<News> paging=newsRepos.findAllByCategoryId(categoryId, pageble);
+		List<NewsDTO> list=new ArrayList<>();
+		for(News news:paging.getContent()) {
+			NewsDTO newsDTO=mapper.mapperNewsDTO(news);
+			list.add(newsDTO);
+		}
+		PaginationDTO dto=new PaginationDTO(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
+		return dto;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 //import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -55,5 +57,9 @@ public interface NewsRepos extends JpaRepository<News, Long> {
 	@Modifying
 	@Query("update News n set n.views=n.views+1 where n.id=?1")
 	void updateView(long id);
+	
+//	get all news by category and pagination
+	Page<News> findAllByCategoryId(int id,Pageable pageable);
+	
 	
 }

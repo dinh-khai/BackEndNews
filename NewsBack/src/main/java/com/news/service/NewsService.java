@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.news.dto.PaginationDTO;
 import com.news.entity.Comment;
 import com.news.entity.News;
 
@@ -14,9 +15,6 @@ public interface NewsService {
 	News findById(long id);
 	
 	List<News> findAll();
-	
-//	paging 
-	List<News> listNewsByCategory(int id, int page);
 	
 //	get all comments of news
 	Set<Comment> listComment(long id);
@@ -49,5 +47,8 @@ public interface NewsService {
 	
 //	update view
 	void updateView(long id);
+	
+//	get news by category and pagination
+	PaginationDTO getNewsByCategory(int page,int categoryId);
 }
 

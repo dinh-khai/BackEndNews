@@ -1,8 +1,7 @@
 		package com.news.dto;
 
 import java.io.Serializable;
-
-import org.springframework.web.multipart.MultipartFile;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,14 +12,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class UserDto implements Serializable{
+public class UserDTO implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private String userName;
 	private String fullName;
-	private String password;
 	private String email;
-	private MultipartFile file;
+	private String avatar;
+	private Date createdTime;
 }

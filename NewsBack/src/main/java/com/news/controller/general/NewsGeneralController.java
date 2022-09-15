@@ -1,10 +1,9 @@
-package com.news.controller.user;
+package com.news.controller.general;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,31 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.news.entity.Comment;
-import com.news.entity.MoreDescription;
+import com.news.dto.PaginationDTO;
 import com.news.entity.News;
 import com.news.service.NewsService;
 
-@CrossOrigin
 @RestController
-@RequestMapping("/news")
-public class NewsController {
+@RequestMapping("/api/news/general/news")
+public class NewsGeneralController {
 	@Autowired
 	NewsService newsService;
 	
 	@GetMapping("/getNews")
 	public News findById(@RequestParam long id) {
 		return newsService.findById(id);
-	}
-	
-	@GetMapping("/all")
-	public List<News> findAllNews(){
-		return newsService.findAll();
-	}
-	
-	@GetMapping("/allCommentOfNews/{id}")
-	public Set<Comment> getAllCommentOfNews(@PathVariable long id) throws Exception{
-			return newsService.listComment(id);
 	}
 	
 //	list most fetured
@@ -69,15 +56,18 @@ public class NewsController {
 		return newsService.mostViews();
 	}
 	
-//	update view 
+//	update view
 	@PutMapping("/updateView")
 	public void updateView(@RequestParam long id) {
 		newsService.updateView(id);
 		return;
 	}
 	
-	@GetMapping("/loadMoreDes")
-	public Set<MoreDescription> loadMoreDes(@RequestParam long id){
-		return newsService.findById(id).getListMoreDes();
+//	news by category 
+	@GetMapping("/paging/{categoryId}/{page}")
+	public PaginationDTO paging(@PathVariable Map<String, String> paging ) {
+		int page=Integer.parseInt(paging.getOrDefault("page","0"));
+		int categoryId=Integer.parseInt(paging.get("categoryId"));
+		return newsService.getNewsByCategory(page, categoryId);
 	}
 }
