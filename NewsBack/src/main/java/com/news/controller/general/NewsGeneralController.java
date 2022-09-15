@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.news.dto.NewsDTO;
 import com.news.dto.PaginationDTO;
 import com.news.entity.News;
 import com.news.service.NewsService;
@@ -22,7 +23,7 @@ public class NewsGeneralController {
 	NewsService newsService;
 	
 	@GetMapping("/getNews")
-	public News findById(@RequestParam long id) {
+	public NewsDTO findById(@RequestParam long id) {
 		return newsService.findById(id);
 	}
 	

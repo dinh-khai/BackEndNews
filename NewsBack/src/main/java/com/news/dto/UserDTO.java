@@ -2,6 +2,7 @@
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +23,5 @@ public class UserDTO implements Serializable{
 	private String email;
 	private String avatar;
 	private Date createdTime;
+	private Set<RoleDTO> roles;
 }

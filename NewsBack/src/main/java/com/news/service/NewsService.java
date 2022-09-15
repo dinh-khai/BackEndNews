@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.news.dto.NewsDTO;
 import com.news.dto.PaginationDTO;
 import com.news.entity.Comment;
 import com.news.entity.News;
@@ -12,7 +13,7 @@ import com.news.entity.News;
 public interface NewsService {
 	
 //	get News
-	News findById(long id);
+	NewsDTO findById(long id);
 	
 	List<News> findAll();
 	

@@ -2,10 +2,11 @@ package com.news.service;
 
 import java.util.List;
 
-import com.news.dto.CommentDTO;
-import com.news.entity.ReComment;
+
+import com.news.dto.ReCommentDTO;
+import com.news.dto.create.ReCommentCreateDTO;
 
 public interface ReCommentService {
-	void saveReComemnt(CommentDTO dto);
-	List<ReComment> getReCommentByComment(long id);
+	void saveReComemnt(ReCommentCreateDTO dto);
+	List<ReCommentDTO> getReCommentByComment(long id);
 }

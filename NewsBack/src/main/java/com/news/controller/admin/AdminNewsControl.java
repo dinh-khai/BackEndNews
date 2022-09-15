@@ -20,7 +20,7 @@ import com.news.service.NewsService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/news/admin")
 public class AdminNewsControl {
 	@Autowired
 	NewsService newsService;
@@ -28,7 +28,7 @@ public class AdminNewsControl {
 	@Autowired
 	MoreDescriptionService desService;
 	
-	@PostMapping("/news/save")
+	@PostMapping("/save")
 	public News save(HttpServletRequest request,@RequestParam String title,@RequestParam String description,
 			@RequestParam int cateId,@RequestParam int classifyId,
 			@RequestParam boolean featured,@RequestParam(required = false) MultipartFile file) {
@@ -36,13 +36,13 @@ public class AdminNewsControl {
 		
 	}
 	
-	@PostMapping(value="/news/saveMoreDes")
+	@PostMapping(value="/saveMoreDes")
 	public void saveMoreDes(@RequestBody(required = false) MoreDescriptionDto des){
 		desService.save(des);
 		return;
 	}
 
-	@PutMapping("/news/update")
+	@PutMapping("/update")
 	public void update(HttpServletRequest request,@RequestParam long id, @RequestParam String title,@RequestParam String description,
 			@RequestParam int cateId,@RequestParam int classifyId,
 			@RequestParam boolean featured,@RequestParam MultipartFile file) {
@@ -50,7 +50,7 @@ public class AdminNewsControl {
 		return;
 	}
 	
-	@DeleteMapping("/news/delete")
+	@DeleteMapping("/delete")
 	public void delete(@RequestParam long id) {
 		newsService.deleteNews(id);
 		return;

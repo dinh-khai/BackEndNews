@@ -1,16 +1,16 @@
 package com.news.service.impl;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.news.dto.CommentDTO;
+import com.news.dto.ReCommentDTO;
+import com.news.dto.create.ReCommentCreateDTO;
 import com.news.entity.ReComment;
-import com.news.repos.CommentRepos;
+import com.news.mapper.MapperDTO;
+import com.news.mapper.MapperEntity;
 import com.news.repos.ReCommentRepos;
-import com.news.repos.UserRepos;
 import com.news.service.ReCommentService;
 
 @Service
@@ -20,31 +20,28 @@ public class ReCommentServiceImpl implements ReCommentService{
 	ReCommentRepos reRepos;
 	
 	@Autowired
-	CommentRepos cmtRepos;
+	MapperDTO mapper;
 	
 	@Autowired
-	UserRepos uRepos;
-	
-	@Override
-	public void saveReComemnt(CommentCreDTO dto) {
-		ReComment re=new ReComment();
-		re.setContent(dto.getDescription());
-		re.setComment(cmtRepos.findById(dto.getId()).orElse(null));
-		re.setUserCreator(uRepos.findById(dto.getUserName()).orElse(null));
-		re.setCreatedTime(Calendar.getInstance().getTime());
-		reRepos.save(re);
-		return;	
-	}
+	MapperEntity mapperEntity;
 
+//	save recomment
 	@Override
-	public void saveReComemnt(CommentDTO dto) {
-		// TODO Auto-generated method stub
+	public void saveReComemnt(ReCommentCreateDTO dto) {
+		ReComment re=mapperEntity.mapperReComment(dto);
+		reRepos.save(re);
+		return;
 		
 	}
 
+//	get recomment by comment
 	@Override
-	public List<ReComment> getReCommentByComment(long id) {
-		List<ReComment> list=reRepos.findByCommentId(id);
+	public List<ReCommentDTO> getReCommentByComment(long id) {
+		List<ReCommentDTO> list=new ArrayList<>();
+		for(ReComment re:reRepos.findByCommentId(id)) {
+			  ReCommentDTO dto=mapper.mapperReCommentDTO(re);
+			  list.add(dto);
+		}
 		return list;
 	}
 

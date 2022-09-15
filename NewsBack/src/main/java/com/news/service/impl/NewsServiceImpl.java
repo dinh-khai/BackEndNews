@@ -41,8 +41,13 @@ public class NewsServiceImpl implements NewsService{
 	MapperDTO mapper;
 	
 	@Override
-	public News findById(long id) {
-		return newsRepos.findById(id).orElse(null);
+	public NewsDTO findById(long id) {
+		News news=newsRepos.findById(id).orElse(null);
+		if(news==null) {
+			return null;
+		}
+		NewsDTO dto=mapper.mapperNewsDTO(news);
+		return dto;
 	}
 	
 	@Override

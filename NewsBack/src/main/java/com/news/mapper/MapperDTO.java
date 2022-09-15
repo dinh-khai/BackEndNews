@@ -1,14 +1,19 @@
 package com.news.mapper;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
 
 import com.news.dto.CommentDTO;
 import com.news.dto.NewsDTO;
 import com.news.dto.ReCommentDTO;
+import com.news.dto.RoleDTO;
 import com.news.dto.UserDTO;
 import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.entity.ReComment;
+import com.news.entity.Role;
 import com.news.entity.User;
 
 @Component
@@ -42,6 +47,15 @@ public class MapperDTO {
 		dto.setAvatar(user.getAvatar());
 		dto.setEmail(user.getEmail());
 		dto.setCreatedTime(user.getCreatedTime());
+		
+		Set<RoleDTO> roles=new HashSet<>();
+		for(Role role:user.getRoles()) {
+			RoleDTO roleDto=mapperRoleDTO(role);
+			roles.add(roleDto);
+			
+		}
+		
+		dto.setRoles(roles);
 		return dto;
 	}
 	
@@ -63,6 +77,13 @@ public class MapperDTO {
 		dto.setDescription(reComment.getContent());
 		dto.setUser(mapperUserDTO(reComment.getUserCreator()));
 		dto.setComment(mapperCommentDTO(reComment.getComment()));
+		return dto;
+	}
+	
+	public RoleDTO mapperRoleDTO(Role role) {
+		RoleDTO dto=new RoleDTO();
+		dto.setId(role.getId());
+		dto.setName(role.getName());
 		return dto;
 	}
 }
