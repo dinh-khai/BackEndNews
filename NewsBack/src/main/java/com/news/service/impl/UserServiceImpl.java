@@ -4,11 +4,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.news.config.JwtFilter;
+import com.news.config.JwtProvider;
+import com.news.dto.UserDTO;
 import com.news.entity.User;
+import com.news.mapper.MapperDTO;
 import com.news.repos.UserRepos;
 import com.news.service.UpLoadService;
 import com.news.service.UserService;
@@ -19,6 +25,14 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	UpLoadService upload;
+	
+	@Autowired
+	MapperDTO mapperDTO;
+	
+	@Autowired
+	JwtProvider jwt;
+	@Autowired
+	JwtFilter filter;
 
 	@Override
 	public String save(String userName,String fullName,String password,String email
@@ -44,8 +58,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Optional<User> findById(String id) {
-		return userRepos.findById(id);
+	public UserDTO findById(HttpServletRequest request) {
+		String token=filter.getJwtFromRequest(request);
+		String userName=jwt.getUserNameFromJWT(token);
+		UserDTO dto=mapperDTO.mapperUserDTO(userRepos.findById(userName).orElse(null));
+		return dto;
 	}
 
 	@Override

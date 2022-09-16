@@ -1,15 +1,17 @@
 package com.news.service;
 
 import java.util.List;
-import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.news.dto.UserDTO;
 import com.news.entity.User;
 
 public interface UserService {
 
-	Optional<User> findById(String id);
+	UserDTO findById(HttpServletRequest request);
 	
 	User getUser(String userName,String password);
 

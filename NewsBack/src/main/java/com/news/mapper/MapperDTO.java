@@ -47,6 +47,7 @@ public class MapperDTO {
 		dto.setAvatar(user.getAvatar());
 		dto.setEmail(user.getEmail());
 		dto.setCreatedTime(user.getCreatedTime());
+		dto.setAdmin(user.isAdmin());
 		
 		Set<RoleDTO> roles=new HashSet<>();
 		for(Role role:user.getRoles()) {

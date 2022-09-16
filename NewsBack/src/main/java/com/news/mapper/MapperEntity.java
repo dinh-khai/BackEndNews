@@ -80,6 +80,7 @@ public class MapperEntity {
 		user.setFullName(dto.getFullName());
 		user.setEmail(dto.getEmail());
 		user.setCreatedTime(dto.getCreatedTime());
+		user.setAdmin(false);
 		return user;
 	}
 	

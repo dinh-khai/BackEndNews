@@ -48,8 +48,8 @@ public class JwtFilter extends OncePerRequestFilter{
 		filterChain.doFilter(request, response);
 
 	}
-
-	private String getJwtFromRequest(HttpServletRequest request) {
+	
+	public String getJwtFromRequest(HttpServletRequest request) {
 		String breakToken = request.getHeader("Authorization");
 		if (StringUtils.hasText(breakToken) && breakToken.startsWith("Bearer ")) {
 			 return breakToken.replace("Bearer ", "");
