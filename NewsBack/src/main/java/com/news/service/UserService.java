@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.dto.UserDTO;
+import com.news.dto.create.UserCreateDTO;
 import com.news.entity.User;
 
 public interface UserService {
@@ -17,8 +18,7 @@ public interface UserService {
 
 	List<User> findAll();
 
-	String save(String userName, String fullName, String password, String email
-				,MultipartFile file,String serverName,int port);
+	String save(UserCreateDTO dto,MultipartFile file,HttpServletRequest request);
 	void updateUser(String password,String userName);
 	
 	

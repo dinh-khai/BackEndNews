@@ -5,9 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.news.service.UpLoadService;
 
@@ -15,7 +18,11 @@ import com.news.service.UpLoadService;
 public class UploadServiceImpl implements UpLoadService{
 
 	@Override
-	public String upload(MultipartFile file,String forder,String defaultImage,String serverName,int port) {
+	public String upload(MultipartFile file,String forder,String defaultImage,HttpServletRequest request) {
+		String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
+	            .replacePath(null)
+	            .build()
+	            .toUriString();
 		String imageURL=null;
 		try {
 			String dir=new ClassPathResource("/static/image").getFile().getAbsolutePath()+"/"+forder;
@@ -27,11 +34,16 @@ public class UploadServiceImpl implements UpLoadService{
 			File saveFile=new File(fileDir + File.separator+file.getOriginalFilename());
 			BufferedOutputStream out= new BufferedOutputStream(new FileOutputStream(saveFile));
 			out.write(file.getBytes());
-			imageURL="http://localhost:8080/image/"+forder+"/"+saveFile.getName();
+			imageURL=baseUrl+"/"+forder+"/"+saveFile.getName();
 			out.close();
 			
 		} catch (IOException e) {
-			imageURL=defaultImage;
+			if(defaultImage==null) {
+				imageURL=null;
+			}
+			else {
+				imageURL=baseUrl+"/"+ defaultImage;
+			}
 		}
 		return imageURL;
 	}

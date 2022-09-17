@@ -3,10 +3,13 @@ package com.news.service;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.dto.NewsDTO;
 import com.news.dto.PaginationDTO;
+import com.news.dto.create.NewsCreateDTO;
 import com.news.entity.Comment;
 import com.news.entity.News;
 
@@ -21,12 +24,10 @@ public interface NewsService {
 	Set<Comment> listComment(long id);
 
 //	save news
-	News saveNews(String title,String description,int cateId,int classifyId
-				 ,boolean featured,MultipartFile file,String serverName,int port);
+	News saveNews(NewsCreateDTO dto,MultipartFile file,HttpServletRequest request);
 	
 //	update news
-	void updateNews(long id,String title,String description,int cateId,int classifyId
-			 ,boolean featured,MultipartFile file,String serverName,int port);
+	void updateNews(long id, NewsCreateDTO dto,MultipartFile file,HttpServletRequest request);
 
 // delete news
 	void deleteNews(long id);

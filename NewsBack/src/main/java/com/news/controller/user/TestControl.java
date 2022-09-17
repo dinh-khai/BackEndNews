@@ -41,9 +41,9 @@ public class TestControl {
 		return forder;
 	}
 	
-	@PostMapping(path="/upload")
-	public void test() throws IOException {
-		System.out.println(app.getContextPath());
+	@GetMapping(path="/upload")
+	public String test() throws IOException {
+		return app.getContextPath();
 //		System.out.println(up.upload(file,"user"));
 	}
 	

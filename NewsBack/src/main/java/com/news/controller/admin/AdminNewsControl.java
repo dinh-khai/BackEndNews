@@ -3,6 +3,7 @@ package com.news.controller.admin;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.dto.MoreDescriptionDto;
+import com.news.dto.create.NewsCreateDTO;
 import com.news.entity.News;
 import com.news.service.MoreDescriptionService;
 import com.news.service.NewsService;
@@ -28,11 +31,9 @@ public class AdminNewsControl {
 	@Autowired
 	MoreDescriptionService desService;
 	
-	@PostMapping("/save")
-	public News save(HttpServletRequest request,@RequestParam String title,@RequestParam String description,
-			@RequestParam int cateId,@RequestParam int classifyId,
-			@RequestParam boolean featured,@RequestParam(required = false) MultipartFile file) {
-		return newsService.saveNews(title, description, cateId, classifyId, featured, file,request.getServerName(),request.getServerPort());
+	@PostMapping(value="/save",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+	public News save(HttpServletRequest request,@RequestPart NewsCreateDTO dto,@RequestPart MultipartFile file) {
+		return newsService.saveNews(dto,file,request);
 		
 	}
 	
@@ -42,11 +43,9 @@ public class AdminNewsControl {
 		return;
 	}
 
-	@PutMapping("/update")
-	public void update(HttpServletRequest request,@RequestParam long id, @RequestParam String title,@RequestParam String description,
-			@RequestParam int cateId,@RequestParam int classifyId,
-			@RequestParam boolean featured,@RequestParam MultipartFile file) {
-		newsService.updateNews(id,title, description, cateId, classifyId, featured, file,request.getServerName(),request.getServerPort());
+	@PutMapping(value="/update",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+	public void update(HttpServletRequest request,@RequestPart NewsCreateDTO dto,@RequestPart MultipartFile file,@RequestPart long id) {
+		newsService.updateNews(id, dto, file, request);
 		return;
 	}
 	

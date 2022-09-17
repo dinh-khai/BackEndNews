@@ -1,9 +1,10 @@
 package com.news.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,9 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.news.dto.NewsDTO;
 import com.news.dto.PaginationDTO;
+import com.news.dto.create.NewsCreateDTO;
 import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.mapper.MapperDTO;
+import com.news.mapper.MapperEntity;
 import com.news.repos.CategoryRepos;
 import com.news.repos.ClassifyRepos;
 import com.news.repos.NewsRepos;
@@ -40,6 +43,9 @@ public class NewsServiceImpl implements NewsService{
 	@Autowired
 	MapperDTO mapper;
 	
+	@Autowired
+	MapperEntity mapperEntity;
+	
 	@Override
 	public NewsDTO findById(long id) {
 		News news=newsRepos.findById(id).orElse(null);
@@ -56,35 +62,22 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public News saveNews(String title, String description, int cateId, int classifyId,
-			boolean featured, MultipartFile file,String serverName,int port) {
-		News news=new News();
-		news.setTime(Calendar.getInstance().getTime());
-		news.setTitle(title);
-		news.setDescription(description);
-		news.setImage(upload.upload(file, "news", null,serverName, port));
-		news.setCategory(cateRepos.findById(cateId).orElse(null));
-		news.setClassify(classifyRepos.findById(classifyId).orElse(null));
-		news.setViews(0);
-		news.setFeatured(featured);
+	public News saveNews(NewsCreateDTO dto, MultipartFile file,HttpServletRequest request) {
+		News news=mapperEntity.mapperNews(dto);
+		String imageURL=upload.upload(file, "news", null, request);
+		news.setImage(imageURL);
 		return newsRepos.save(news);
 		
 	}
 
 	@Override
-	public void updateNews(long id, String title, String description, int cateId, int classifyId, boolean featured,
-			MultipartFile file,String serverName,int port) {
+	public void updateNews(long id, NewsCreateDTO dto,MultipartFile file,HttpServletRequest request) {
 		News news = newsRepos.findById(id).orElse(null);
-		if(news==null) return;
-		String imageURL=upload.upload(file, "news", null,serverName,port);
-		news.setTitle(title);
-		news.setDescription(description);
-		if(imageURL!=null) {
+		if(news!=null) {
+			String imageURL=upload.upload(file, "news", null, request);
+			news=mapperEntity.mapperNews(dto);
 			news.setImage(imageURL);
 		}
-		news.setCategory(cateRepos.findById(cateId).orElse(null));
-		news.setClassify(classifyRepos.findById(classifyId).orElse(null));
-		news.setFeatured(featured);
 		newsRepos.save(news);
 	}
 
