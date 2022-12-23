@@ -22,12 +22,22 @@ public class NewsGeneralController {
 	@Autowired
 	NewsService newsService;
 	
+	/**
+	 * find news by id
+	 * 
+	 * @param id
+	 * @return news found
+	 */
 	@GetMapping("/getNews")
 	public NewsDTO findById(@RequestParam long id) {
 		return newsService.findById(id);
 	}
 	
-//	list most fetured
+	/**
+	 * api news most featured
+	 * 
+	 * @return list news found
+	 */
 	@GetMapping("/featured")
 	public List<News> mostFeatured(){
 		return newsService.mostFeatured();

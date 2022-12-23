@@ -17,6 +17,12 @@ public class CommentGeneralController {
 	@Autowired
 	CommentService cmtService;
 	
+	/**
+	 * paging comment
+	 * 
+	 * @param comments
+	 * @return list comments
+	 */
 	@GetMapping("/{newsId}/{page}")
 	public PaginationDTO getCommentByNews(@PathVariable Map<String, String> comments) {
 		long id=Long.parseLong(comments.get("newsId"));

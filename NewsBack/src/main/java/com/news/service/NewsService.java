@@ -14,43 +14,83 @@ import com.news.entity.Comment;
 import com.news.entity.News;
 
 public interface NewsService {
-	
-//	get News
+
+	/**
+	 * find news by id
+	 * 
+	 * @param id
+	 * @return NewsDto
+	 */
 	NewsDTO findById(long id);
-	
+
+	/**
+	 * find all news
+	 * 
+	 * @return all news found
+	 */
 	List<News> findAll();
-	
-//	get all comments of news
+
+	/**
+	 * find comments by news id
+	 * 
+	 * @param id
+	 * 
+	 * @return list comments found
+	 */
 	Set<Comment> listComment(long id);
 
-//	save news
-	News saveNews(NewsCreateDTO dto,MultipartFile file,HttpServletRequest request);
-	
-//	update news
-	void updateNews(long id, NewsCreateDTO dto,MultipartFile file,HttpServletRequest request);
+	/**
+	 * save news
+	 * 
+	 * @param dto
+	 * @param file
+	 * @param request
+	 * @return news save
+	 */
+	News saveNews(NewsCreateDTO dto, MultipartFile file, HttpServletRequest request);
 
-// delete news
+	/**
+	 * update news
+	 * 
+	 * @param id
+	 * @param dto
+	 * @param file
+	 * @param request
+	 */
+	void updateNews(long id, NewsCreateDTO dto, MultipartFile file, HttpServletRequest request);
+
+	/**
+	 * delete news
+	 * 
+	 * @param id
+	 */
 	void deleteNews(long id);
-	
-//	
+
+	/**
+	 * get list most new featured
+	 * 
+	 * @return list news found
+	 */
 	List<News> mostFeatured();
-	
-//	get new news
+
+	/**
+	 * 
+	 * @return
+	 */
 	List<News> mostNews();
-	
+
 //	top 6 news by category
 	List<News> listTop6NewsByCate(int id);
-	
+
 // 	top 4 news by classify
 	List<News> listTop4NewsByClassify(int id);
-	
+
 //	most views
 	List<News> mostViews();
-	
+
 //	update view
 	void updateView(long id);
-	
-//	get news by category and pagination
-	PaginationDTO getNewsByCategory(int page,int categoryId);
-}
 
+//	get news by category and pagination
+	PaginationDTO getNewsByCategory(int page, int categoryId);
+}

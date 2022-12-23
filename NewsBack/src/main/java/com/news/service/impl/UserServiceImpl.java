@@ -1,6 +1,5 @@
 package com.news.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,23 +60,6 @@ public class UserServiceImpl implements UserService{
 		String userName=jwt.getUserNameFromJWT(token);
 		UserDTO dto=mapperDTO.mapperUserDTO(userRepos.findById(userName).orElse(null));
 		return dto;
-	}
-
-	@Override
-	public User getUser(String userName, String password) {
-		return userRepos.user(userName, password);
-	}
-
-	@Override
-	public List<User> findAll() {
-		return userRepos.findAll();
-	}
-
-	@Override
-	public void updateUser(String password,String userName) {
-	 userRepos.updatePass(password, userName);
-	 return;
-	}
-	
+	}	
 	
 }
