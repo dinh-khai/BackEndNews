@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.news.dto.PaginationDTO;
+import com.news.dto.resp.PaginationDTOResp;
 import com.news.service.CommentService;
 
 @RequestMapping("/api/news/genral/comment")
@@ -24,7 +24,7 @@ public class CommentGeneralController {
 	 * @return list comments
 	 */
 	@GetMapping("/{newsId}/{page}")
-	public PaginationDTO getCommentByNews(@PathVariable Map<String, String> comments) {
+	public PaginationDTOResp getCommentByNews(@PathVariable Map<String, String> comments) {
 		long id=Long.parseLong(comments.get("newsId"));
 		int page=Integer.parseInt(comments.getOrDefault("page", "0"));
 		return cmtService.getCommentByNews(id, page);

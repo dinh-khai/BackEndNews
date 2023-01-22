@@ -5,8 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.news.dto.ReCommentDTO;
-import com.news.dto.create.ReCommentCreateDTO;
+
+import com.news.dto.req.ReCommentDTOReq;
+import com.news.dto.resp.ReCommentDTOResp;
 import com.news.entity.ReComment;
 import com.news.mapper.MapperDTO;
 import com.news.mapper.MapperEntity;
@@ -27,7 +28,7 @@ public class ReCommentServiceImpl implements ReCommentService{
 
 //	save recomment
 	@Override
-	public void saveReComemnt(ReCommentCreateDTO dto) {
+	public void saveReComemnt(ReCommentDTOReq dto) {
 		ReComment re=mapperEntity.mapperReComment(dto);
 		reRepos.save(re);
 		return;
@@ -36,10 +37,10 @@ public class ReCommentServiceImpl implements ReCommentService{
 
 //	get recomment by comment
 	@Override
-	public List<ReCommentDTO> getReCommentByComment(long id) {
-		List<ReCommentDTO> list=new ArrayList<>();
+	public List<ReCommentDTOResp> getReCommentByComment(long id) {
+		List<ReCommentDTOResp> list=new ArrayList<>();
 		for(ReComment re:reRepos.findByCommentId(id)) {
-			  ReCommentDTO dto=mapper.mapperReCommentDTO(re);
+			  ReCommentDTOResp dto=mapper.mapperReCommentDTO(re);
 			  list.add(dto);
 		}
 		return list;

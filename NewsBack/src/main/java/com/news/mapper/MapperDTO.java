@@ -5,11 +5,11 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import com.news.dto.CommentDTO;
-import com.news.dto.NewsDTO;
-import com.news.dto.ReCommentDTO;
-import com.news.dto.RoleDTO;
-import com.news.dto.UserDTO;
+import com.news.dto.resp.CommentDTOResp;
+import com.news.dto.resp.NewsDTOResp;
+import com.news.dto.resp.ReCommentDTOResp;
+import com.news.dto.resp.RoleDTOResp;
+import com.news.dto.resp.UserDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.entity.ReComment;
@@ -18,9 +18,13 @@ import com.news.entity.User;
 
 @Component
 public class MapperDTO {
-//	mapper news entity to news dto
-	public NewsDTO mapperNewsDTO(News news) {
-		NewsDTO dto = new NewsDTO();
+	/**
+	 * mapper news entity to news dto
+	 * @param news
+	 * @return
+	 */
+	public NewsDTOResp mapperNewsDTO(News news) {
+		NewsDTOResp dto = new NewsDTOResp();
 		dto.setId(news.getId());
 		dto.setTitle(news.getTitle());
 		dto.setDescription(news.getDescription());
@@ -28,8 +32,8 @@ public class MapperDTO {
 		dto.setClassify(news.getClassify());
 		dto.setImage(news.getImage());
 		dto.setFeatured(news.isFeatured());
-		dto.setList(news.getListMoreDes());
-		dto.setCreatedTime(news.getTime());
+		dto.setTimeInsert(news.getTimeInsert());
+		dto.setTineUpdate(news.getTimeUpdate());
 		int count=0;
 		for(Comment comment:news.getListComments()) {
 			count+=comment.getListReComment().size();
@@ -39,9 +43,14 @@ public class MapperDTO {
 		return dto;
 	}
 	
-//	mapper user entity to userDTO
-	public UserDTO mapperUserDTO(User user) {
-		UserDTO dto =new UserDTO();
+	/**
+	 * mapper user entity to userDTO
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public UserDTOResp mapperUserDTO(User user) {
+		UserDTOResp dto =new UserDTOResp();
 		dto.setUserName(user.getUserName());
 		dto.setFullName(user.getFullName());
 		dto.setAvatar(user.getAvatar());
@@ -49,9 +58,9 @@ public class MapperDTO {
 		dto.setCreatedTime(user.getCreatedTime());
 		dto.setAdmin(user.isAdmin());
 		
-		Set<RoleDTO> roles=new HashSet<>();
+		Set<RoleDTOResp> roles=new HashSet<>();
 		for(Role role:user.getRoles()) {
-			RoleDTO roleDto=mapperRoleDTO(role);
+			RoleDTOResp roleDto=mapperRoleDTO(role);
 			roles.add(roleDto);
 			
 		}
@@ -60,9 +69,13 @@ public class MapperDTO {
 		return dto;
 	}
 	
-//	mapper comment entity to comment dto
-	public CommentDTO mapperCommentDTO(Comment comment) {
-		CommentDTO dto=new CommentDTO();
+	/**
+	 * mapper comment entity to comment dto
+	 * @param comment
+	 * @return
+	 */
+	public CommentDTOResp mapperCommentDTO(Comment comment) {
+		CommentDTOResp dto=new CommentDTOResp();
 		dto.setId(comment.getId());
 		dto.setDescription(comment.getContent());
 		dto.setCreatedTime(comment.getCreatedTime());
@@ -71,9 +84,13 @@ public class MapperDTO {
 		return dto;
 	}
 	
-//	mapper recomment entity to recomment dto
-	public ReCommentDTO mapperReCommentDTO(ReComment reComment) {
-		ReCommentDTO dto=new ReCommentDTO();
+	/**
+	 * mapper recomment entity to recomment dto
+	 * @param reComment
+	 * @return
+	 */
+	public ReCommentDTOResp mapperReCommentDTO(ReComment reComment) {
+		ReCommentDTOResp dto=new ReCommentDTOResp();
 		dto.setId(reComment.getId());
 		dto.setDescription(reComment.getContent());
 		dto.setUser(mapperUserDTO(reComment.getUserCreator()));
@@ -81,8 +98,13 @@ public class MapperDTO {
 		return dto;
 	}
 	
-	public RoleDTO mapperRoleDTO(Role role) {
-		RoleDTO dto=new RoleDTO();
+	/**
+	 * 
+	 * @param role
+	 * @return
+	 */
+	public RoleDTOResp mapperRoleDTO(Role role) {
+		RoleDTOResp dto=new RoleDTOResp();
 		dto.setId(role.getId());
 		dto.setName(role.getName());
 		return dto;

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.config.JwtProvider;
-import com.news.dto.JwtResponse;
-import com.news.dto.create.UserCreateDTO;
+import com.news.dto.req.UserDTOReq;
+import com.news.dto.resp.JwtResponse;
 import com.news.service.UserService;
 
 @RestController
@@ -43,7 +43,7 @@ public class UserGeneralController {
 	}
 	
 	@PostMapping(value="/register",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String register(@RequestPart UserCreateDTO dto,@RequestPart MultipartFile file,HttpServletRequest request) {
+	public String register(@RequestPart UserDTOReq dto,@RequestPart MultipartFile file,HttpServletRequest request) {
 		return userService.save(dto, file, request);
 	}
 	

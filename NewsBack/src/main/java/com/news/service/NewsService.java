@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.news.dto.NewsDTO;
-import com.news.dto.PaginationDTO;
-import com.news.dto.create.NewsCreateDTO;
+import com.news.dto.req.NewsDTOReq;
+import com.news.dto.resp.NewsDTOResp;
+import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
 
@@ -21,7 +21,7 @@ public interface NewsService {
 	 * @param id
 	 * @return NewsDto
 	 */
-	NewsDTO findById(long id);
+	NewsDTOResp findById(long id);
 
 	/**
 	 * find all news
@@ -47,7 +47,7 @@ public interface NewsService {
 	 * @param request
 	 * @return news save
 	 */
-	News saveNews(NewsCreateDTO dto, MultipartFile file, HttpServletRequest request);
+	News saveNews(NewsDTOReq dto, MultipartFile file, HttpServletRequest request);
 
 	/**
 	 * update news
@@ -57,7 +57,7 @@ public interface NewsService {
 	 * @param file
 	 * @param request
 	 */
-	void updateNews(long id, NewsCreateDTO dto, MultipartFile file, HttpServletRequest request);
+	void updateNews(long id, NewsDTOReq dto, MultipartFile file, HttpServletRequest request);
 
 	/**
 	 * delete news
@@ -92,5 +92,5 @@ public interface NewsService {
 	void updateView(long id);
 
 //	get news by category and pagination
-	PaginationDTO getNewsByCategory(int page, int categoryId);
+	PaginationDTOResp getNewsByCategory(int page, int categoryId);
 }

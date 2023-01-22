@@ -13,9 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.news.dto.NewsDTO;
-import com.news.dto.PaginationDTO;
-import com.news.dto.create.NewsCreateDTO;
+import com.news.common.Constants;
+import com.news.dto.req.NewsDTOReq;
+import com.news.dto.resp.NewsDTOResp;
+import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.mapper.MapperDTO;
@@ -46,35 +47,41 @@ public class NewsServiceImpl implements NewsService{
 	@Autowired
 	MapperEntity mapperEntity;
 	
+	/**
+	 * 
+	 */
 	@Override
-	public NewsDTO findById(long id) {
+	public NewsDTOResp findById(long id) {
 		News news=newsRepos.findById(id).orElse(null);
 		if(news==null) {
 			return null;
 		}
-		NewsDTO dto=mapper.mapperNewsDTO(news);
+		NewsDTOResp dto=mapper.mapperNewsDTO(news);
 		return dto;
 	}
 	
+	/**
+	 * o
+	 */
 	@Override
 	public List<News> findAll() {
 		return newsRepos.findAll();
 	}
 
 	@Override
-	public News saveNews(NewsCreateDTO dto, MultipartFile file,HttpServletRequest request) {
+	public News saveNews(NewsDTOReq dto, MultipartFile file,HttpServletRequest request) {
 		News news=mapperEntity.mapperNews(dto);
-		String imageURL=upload.upload(file, "news", null, request);
+		String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
 		news.setImage(imageURL);
 		return newsRepos.save(news);
 		
 	}
 
 	@Override
-	public void updateNews(long id, NewsCreateDTO dto,MultipartFile file,HttpServletRequest request) {
+	public void updateNews(long id, NewsDTOReq dto,MultipartFile file,HttpServletRequest request) {
 		News news = newsRepos.findById(id).orElse(null);
 		if(news!=null) {
-			String imageURL=upload.upload(file, "news", null, request);
+			String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
 			news=mapperEntity.mapperNews(dto);
 			news.setImage(imageURL);
 		}
@@ -124,15 +131,15 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public PaginationDTO getNewsByCategory(int page, int categoryId) {
-		Pageable pageble=PageRequest.of(page, PaginationDTO.size);
+	public PaginationDTOResp getNewsByCategory(int page, int categoryId) {
+		Pageable pageble=PageRequest.of(page, PaginationDTOResp.size);
 		Page<News> paging=newsRepos.findAllByCategoryId(categoryId, pageble);
-		List<NewsDTO> list=new ArrayList<>();
+		List<NewsDTOResp> list=new ArrayList<>();
 		for(News news:paging.getContent()) {
-			NewsDTO newsDTO=mapper.mapperNewsDTO(news);
+			NewsDTOResp newsDTO=mapper.mapperNewsDTO(news);
 			list.add(newsDTO);
 		}
-		PaginationDTO dto=new PaginationDTO(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
+		PaginationDTOResp dto=new PaginationDTOResp(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
 		return dto;
 	}
 }

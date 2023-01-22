@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.news.dto.UserDTO;
+import com.news.dto.resp.UserDTOResp;
 import com.news.service.UserService;
 	
 @CrossOrigin
@@ -20,7 +20,7 @@ public class UserController {
 	UserService uService;
 	
 	@GetMapping("/infoUser")
-	public UserDTO getUser(HttpServletRequest request) {
+	public UserDTOResp getUser(HttpServletRequest request) {
 		return uService.findById(request);
 	}
 	

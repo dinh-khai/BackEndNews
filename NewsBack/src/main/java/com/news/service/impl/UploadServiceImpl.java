@@ -3,7 +3,7 @@ package com.news.service.impl;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,41 +11,72 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import com.news.common.Utils;
 import com.news.service.UpLoadService;
 
 @Service
 public class UploadServiceImpl implements UpLoadService{
-
+	
+	/**
+	 * 
+	 */
 	@Override
-	public String upload(MultipartFile file,String forder,String defaultImage,HttpServletRequest request) {
-		String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
-	            .replacePath(null)
-	            .build()
-	            .toUriString();
-		String imageURL=null;
+	public String upload(MultipartFile file,String folderName,HttpServletRequest request) {
+		String baseUrl=null;					//
+		String imageURL=null;					// url of image
+		String folderUrl =null;					// 
+		File folder=null;						// 
+		String dateFormat=null;
+		String fileName=null;
+		
 		try {
-			String dir=new ClassPathResource("/static/image").getFile().getAbsolutePath()+"/"+forder;
-			File fileDir=new File(dir);
-			if(!fileDir.exists()) {
-				fileDir.mkdirs();
+			baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
+					.replacePath(null)
+					.build()
+					.toUriString();
+			dateFormat="ddMMyyyy";
+			folderName=folderName+"/"+Utils.converDateToStr(dateFormat, new Date());
+			folderUrl=new ClassPathResource("/static").getFile().getAbsolutePath()
+					  +"/"+folderName;
+			folder=new File(folderUrl);
+			if(!folder.exists()) {
+				folder.mkdirs();
 			}
 			
-			File saveFile=new File(fileDir + File.separator+file.getOriginalFilename());
+			dateFormat="ddMMyyyyhhmmss";
+			fileName=getNewFileName(file.getOriginalFilename(),dateFormat);
+			// create file upload
+			File saveFile=new File(folder + File.separator
+								   +fileName);
 			BufferedOutputStream out= new BufferedOutputStream(new FileOutputStream(saveFile));
 			out.write(file.getBytes());
-			imageURL=baseUrl+"/"+forder+"/"+saveFile.getName();
+			imageURL=baseUrl+"/"+folderName+"/"+saveFile.getName();
 			out.close();
 			
-		} catch (IOException e) {
-			if(defaultImage==null) {
-				imageURL=null;
-			}
-			else {
-				imageURL=baseUrl+"/"+ defaultImage;
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return imageURL;
+	}
+	
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	private String getNewFileName(String fileName,String dateFormat) {
+		try {
+			String[] strArr=fileName.split("[.]");
+			if(strArr.length>=2) {
+				fileName=fileName.substring(0,fileName.length()-strArr[strArr.length-1].length())
+						 +Utils.converDateToStr(dateFormat, new Date())
+						 +"."+strArr[strArr.length-1];
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return fileName;
 	}
 
 }

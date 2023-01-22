@@ -1,12 +1,12 @@
 package com.news.service;
 
-import com.news.dto.PaginationDTO;
-import com.news.dto.create.CommentCreateDTO;
+import com.news.dto.req.CommentDTOReq;
+import com.news.dto.resp.PaginationDTOResp;
 
 public interface CommentService {
 	
-	void saveComment(CommentCreateDTO dto);
+	void saveComment(CommentDTOReq dto);
 	
-	PaginationDTO getCommentByNews(long id,int page);
+	PaginationDTOResp getCommentByNews(long id,int page);
 
 }

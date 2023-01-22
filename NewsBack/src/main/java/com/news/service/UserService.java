@@ -4,12 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.news.dto.UserDTO;
-import com.news.dto.create.UserCreateDTO;
+import com.news.dto.req.UserDTOReq;
+import com.news.dto.resp.UserDTOResp;
 
 public interface UserService {
 
-	UserDTO findById(HttpServletRequest request);
+	UserDTOResp findById(HttpServletRequest request);
 
-	String save(UserCreateDTO dto,MultipartFile file,HttpServletRequest request);
+	String save(UserDTOReq dto,MultipartFile file,HttpServletRequest request);
 }

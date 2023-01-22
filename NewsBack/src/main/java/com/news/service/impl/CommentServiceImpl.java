@@ -10,9 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.news.dto.CommentDTO;
-import com.news.dto.PaginationDTO;
-import com.news.dto.create.CommentCreateDTO;
+import com.news.dto.req.CommentDTOReq;
+import com.news.dto.resp.CommentDTOResp;
+import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.mapper.MapperDTO;
 import com.news.mapper.MapperEntity;
@@ -30,23 +30,23 @@ public class CommentServiceImpl implements CommentService{
 	MapperEntity mapperEntity;
 
 	@Override
-	public void saveComment(CommentCreateDTO dto) {
+	public void saveComment(CommentDTOReq dto) {
 		Comment cmt=mapperEntity.mapperComment(dto);
 		cmtRepos.save(cmt);
 		return;
 	}
 
 	@Override
-	public PaginationDTO getCommentByNews(long id, int page) {
-		Pageable pageable=PageRequest.of(page, PaginationDTO.size);
+	public PaginationDTOResp getCommentByNews(long id, int page) {
+		Pageable pageable=PageRequest.of(page, PaginationDTOResp.size);
 		Page<Comment> paging=cmtRepos.findAllByNewsId(id, pageable);
-		List<CommentDTO> list=new ArrayList<>();
+		List<CommentDTOResp> list=new ArrayList<>();
 		for(Comment cmt:paging.getContent()) {
-			CommentDTO dto=mapper.mapperCommentDTO(cmt);
+			CommentDTOResp dto=mapper.mapperCommentDTO(cmt);
 			list.add(dto);
 		}
 		
-		return new PaginationDTO(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
+		return new PaginationDTOResp(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
 	}
 
 

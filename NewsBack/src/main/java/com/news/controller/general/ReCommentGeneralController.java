@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.news.dto.ReCommentDTO;
+import com.news.dto.resp.ReCommentDTOResp;
 import com.news.service.ReCommentService;
 
 @RestController
@@ -18,7 +18,7 @@ public class ReCommentGeneralController {
 	ReCommentService reService;
 	
 	@GetMapping("/allByComment/{cmtId}")
-	public List<ReCommentDTO> getReCommentByComment(@PathVariable long cmtId){
+	public List<ReCommentDTOResp> getReCommentByComment(@PathVariable long cmtId){
 		return reService.getReCommentByComment(cmtId);
 	}
 }

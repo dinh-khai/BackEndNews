@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.news.dto.UserDTO;
+
+import com.news.dto.resp.UserDTOResp;
 import com.news.repos.NewsRepos;
 import com.news.service.TestService;
 import com.news.service.UpLoadService;
@@ -48,7 +49,7 @@ public class TestControl {
 	}
 	
 	@PostMapping(path="/user")
-	public void getUser(@RequestBody UserDTO user) {
+	public void getUser(@RequestBody UserDTOResp user) {
 		System.out.println(user.getFullName());
 		return;
 	}
@@ -59,5 +60,10 @@ public class TestControl {
 		System.out.println(request.getServerPort());
 		System.out.println(request.getServerName());
 		return;
+	}
+	
+	@PostMapping("/ckeditor")
+	public void ck(@RequestBody String a) {
+		System.out.println(a);
 	}
 }

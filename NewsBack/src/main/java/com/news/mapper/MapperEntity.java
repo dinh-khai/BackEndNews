@@ -3,10 +3,10 @@ package com.news.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.news.dto.create.CommentCreateDTO;
-import com.news.dto.create.NewsCreateDTO;
-import com.news.dto.create.ReCommentCreateDTO;
-import com.news.dto.create.UserCreateDTO;
+import com.news.dto.req.CommentDTOReq;
+import com.news.dto.req.NewsDTOReq;
+import com.news.dto.req.ReCommentDTOReq;
+import com.news.dto.req.UserDTOReq;
 import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.entity.NewsCategory;
@@ -33,8 +33,12 @@ public class MapperEntity {
 	CategoryRepos cateRepos;
 	
 	
-//	mapper news create dto to news entity
-	public News mapperNews(NewsCreateDTO dto) {
+	/**
+	 * mapper news create dto to news entity
+	 * @param dto
+	 * @return
+	 */
+	public News mapperNews(NewsDTOReq dto) {
 		News news =new News();
 		NewsCategory category=cateRepos.findById(dto.getCategoryId()).orElse(null);
 		NewsClassification classify=classifyRepos.findById(dto.getClassifyId()).orElse(null);
@@ -44,12 +48,16 @@ public class MapperEntity {
 		news.setClassify(classify);
 		news.setFeatured(dto.isFeatured());
 		news.setViews(0);
-		news.setTime(dto.getCreatedTime());
+		news.setTimeInsert(dto.getTimeInsert());
 		return news;
 	}
 	
-//	mapper comment create dto to comment entity
-	public Comment mapperComment(CommentCreateDTO dto) {
+	/**
+	 * mapper comment create dto to comment entity
+	 * @param dto
+	 * @return
+	 */
+	public Comment mapperComment(CommentDTOReq dto) {
 		Comment cmt = new Comment();
 		User user=userRepos.findById(dto.getUserName()).orElse(null);
 		News news =newsRepos.findById(dto.getNewsId()).orElse(null);
@@ -60,8 +68,12 @@ public class MapperEntity {
 		return cmt;
 	}
 	
-//	mapper re comment create to recomment entity
-	public ReComment mapperReComment(ReCommentCreateDTO dto) {
+	/**
+	 * mapper re comment create to recomment entity
+	 * @param dto
+	 * @return
+	 */
+	public ReComment mapperReComment(ReCommentDTOReq dto) {
 		ReComment reComment=new ReComment();
 		User user=userRepos.findById(dto.getUserName()).orElse(null);
 		Comment comment=cmtRepos.findById(dto.getCmtId()).orElse(null);
@@ -72,8 +84,12 @@ public class MapperEntity {
 		return reComment;
 	}
 	
-//	mapper user create dto to user entity
-	public User mapperUser(UserCreateDTO dto) {
+	/**
+	 * mapper user create dto to user entity
+	 * @param dto
+	 * @return
+	 */
+	public User mapperUser(UserDTOReq dto) {
 		User user =new User();
 		user.setUserName(dto.getUserName());
 		user.setPassword(dto.getPassword());

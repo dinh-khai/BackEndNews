@@ -46,9 +46,6 @@ public class News implements Serializable{
 	@Column(name="description")
 	private String description;
 	
-	@Column(name="time")
-	private Date time;
-	
 	@Column(name="image")
 	private String image;
 	
@@ -70,8 +67,10 @@ public class News implements Serializable{
 	@OneToMany(mappedBy = "news",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Set<Comment> listComments;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "news",fetch=FetchType.EAGER,cascade = CascadeType.ALL)
-	private Set<MoreDescription> listMoreDes; 
+	@Column(name="time_insert")
+	private Date timeInsert;
+	
+	@Column(name="time_update")
+	private Date timeUpdate;
 	
 }

@@ -2,8 +2,8 @@ package com.news.service;
 
 
 
-import com.news.dto.MoreDescriptionDto;
+import com.news.dto.resp.MoreDescriptionDTOResp;
 
 public interface MoreDescriptionService {
-	void save(MoreDescriptionDto des);
+	void save(MoreDescriptionDTOResp des);
 }
