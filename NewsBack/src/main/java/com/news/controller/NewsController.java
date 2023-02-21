@@ -1,4 +1,4 @@
-package com.news.controller.general;
+package com.news.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -17,8 +17,8 @@ import com.news.entity.News;
 import com.news.service.NewsService;
 
 @RestController
-@RequestMapping("/api/news/general/news")
-public class NewsGeneralController {
+@RequestMapping("/api/news")
+public class NewsController {
 	@Autowired
 	NewsService newsService;
 	
@@ -28,8 +28,8 @@ public class NewsGeneralController {
 	 * @param id
 	 * @return news found
 	 */
-	@GetMapping("/getNews")
-	public NewsDTOResp findById(@RequestParam long id) {
+	@GetMapping("/{id}")
+	public NewsDTOResp findById(@PathVariable long id) {
 		return newsService.findById(id);
 	}
 	
@@ -43,9 +43,12 @@ public class NewsGeneralController {
 		return newsService.mostFeatured();
 	}
 	
-//	news new
-	@GetMapping("/new")
-	public List<News> getNewsNew(){
+	/**
+	 * get new news
+	 * @return
+	 */
+	@GetMapping("/latest/{num}")
+	public List<News> getNewsNew(@PathVariable int num){
 		return newsService.mostNews();
 	}
 	

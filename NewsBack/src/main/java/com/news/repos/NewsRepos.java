@@ -17,7 +17,11 @@ import com.news.entity.News;
 @Repository
 public interface NewsRepos extends JpaRepository<News, Long> {
 	
-//	get list news by id category
+	 /**
+	  * 
+	  * @param categoryId
+	  * @return
+	  */
 	 List<News> findByCategoryId(int categoryId);
 ////	get list news by id classification
 //	List<News> findAllByIdClassif(int idClassif);

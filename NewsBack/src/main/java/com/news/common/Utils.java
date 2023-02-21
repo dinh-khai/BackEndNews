@@ -22,4 +22,27 @@ public class Utils {
 		}
 		return str;
 	}
+	
+	/**
+	 * 
+	 * @param fileName
+	 * @param arrExtentions
+	 * @return type of result
+	 */
+	public static boolean checkFileExtention(String fileName,String[] arrExtentions) {
+		try {
+			String[] arrs=fileName.split("[.]");
+			String fileExtention=arrs[arrs.length-1];
+			for(int i=0;i<arrExtentions.length;i++) {
+				if(fileExtention.equals(arrExtentions[i])) {
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return false;
+	}
 }

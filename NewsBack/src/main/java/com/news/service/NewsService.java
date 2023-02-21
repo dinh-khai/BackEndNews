@@ -12,6 +12,7 @@ import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
+import com.news.exception.ErrMessage;
 
 public interface NewsService {
 
@@ -47,7 +48,7 @@ public interface NewsService {
 	 * @param request
 	 * @return news save
 	 */
-	News saveNews(NewsDTOReq dto, MultipartFile file, HttpServletRequest request);
+	boolean saveNews(NewsDTOReq dto, MultipartFile file,ErrMessage errMessage, HttpServletRequest request);
 
 	/**
 	 * update news
@@ -78,6 +79,14 @@ public interface NewsService {
 	 * @return
 	 */
 	List<News> mostNews();
+	
+	/**
+	 * get latest news
+	 * 
+	 * @param num
+	 * @return
+	 */
+	List<News> getLatestNews(int num);
 
 //	top 6 news by category
 	List<News> listTop6NewsByCate(int id);

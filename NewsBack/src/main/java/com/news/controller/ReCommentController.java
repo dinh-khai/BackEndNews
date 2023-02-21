@@ -1,4 +1,4 @@
-package com.news.controller.general;
+package com.news.controller;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import com.news.service.ReCommentService;
 
 @RestController
 @RequestMapping("/api/news/general/reComment")
-public class ReCommentGeneralController {
+public class ReCommentController {
 	@Autowired
 	ReCommentService reService;
 	

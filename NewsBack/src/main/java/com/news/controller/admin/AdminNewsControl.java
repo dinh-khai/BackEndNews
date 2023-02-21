@@ -3,7 +3,9 @@ package com.news.controller.admin;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.news.dto.req.NewsDTOReq;
 import com.news.entity.News;
+import com.news.exception.ErrMessage;
+import com.news.exception.MyException;
 import com.news.service.NewsService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/news/admin")
+@RequestMapping("/api/")
 public class AdminNewsControl {
 	@Autowired
 	NewsService newsService;
@@ -34,9 +38,12 @@ public class AdminNewsControl {
 	 * @return
 	 */
 	@PostMapping(value="/save",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-	public News save(HttpServletRequest request,@RequestPart NewsDTOReq dto,@RequestPart MultipartFile file) {
-		return newsService.saveNews(dto,file,request);
+	public ResponseEntity<String> save(HttpServletRequest request,@RequestPart NewsDTOReq dto,@RequestPart MultipartFile file) {
+		ErrMessage errMessage =new ErrMessage();
+		boolean check=newsService.saveNews(dto, file, errMessage, request);
+		if(!check) throw new MyException(errMessage);
 		
+		return new ResponseEntity<String>("Insert success",HttpStatus.OK);
 	}
 
 	/**

@@ -19,6 +19,7 @@ import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
+import com.news.exception.ErrMessage;
 import com.news.mapper.MapperDTO;
 import com.news.mapper.MapperEntity;
 import com.news.repos.CategoryRepos;
@@ -69,23 +70,27 @@ public class NewsServiceImpl implements NewsService{
 	}
 
 	@Override
-	public News saveNews(NewsDTOReq dto, MultipartFile file,HttpServletRequest request) {
+	public boolean saveNews(NewsDTOReq dto, MultipartFile file,ErrMessage errMessage,HttpServletRequest request) {		
 		News news=mapperEntity.mapperNews(dto);
-		String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
+		String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS,errMessage, request);
+		if(errMessage.getMsg()!=null&&!errMessage.getMsg().equals("")) {
+			return false;
+		}
 		news.setImage(imageURL);
-		return newsRepos.save(news);
+		newsRepos.save(news);
+		return true;
 		
 	}
 
 	@Override
 	public void updateNews(long id, NewsDTOReq dto,MultipartFile file,HttpServletRequest request) {
-		News news = newsRepos.findById(id).orElse(null);
-		if(news!=null) {
-			String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
-			news=mapperEntity.mapperNews(dto);
-			news.setImage(imageURL);
-		}
-		newsRepos.save(news);
+//		News news = newsRepos.findById(id).orElse(null);
+//		if(news!=null) {
+//			String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
+//			news=mapperEntity.mapperNews(dto);
+//			news.setImage(imageURL);
+//		}
+//		newsRepos.save(news);
 	}
 
 	@Override
@@ -107,6 +112,18 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public List<News> mostNews() {
 		return newsRepos.listNewNews();
+	}
+	
+	/**
+	 * get latest news
+	 * 
+	 * @param num
+	 * @return list news latest
+	 */
+	@Override
+	public List<News> getLatestNews(int num) {
+			
+		return null;
 	}
 
 	@Override
@@ -142,4 +159,5 @@ public class NewsServiceImpl implements NewsService{
 		PaginationDTOResp dto=new PaginationDTOResp(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
 		return dto;
 	}
+
 }

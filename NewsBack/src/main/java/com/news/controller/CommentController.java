@@ -1,4 +1,4 @@
-package com.news.controller.general;
+package com.news.controller;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ import com.news.service.CommentService;
 
 @RequestMapping("/api/news/genral/comment")
 @RestController
-public class CommentGeneralController {
+public class CommentController {
 	@Autowired
 	CommentService cmtService;
 	

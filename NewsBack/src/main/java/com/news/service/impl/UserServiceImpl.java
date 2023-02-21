@@ -47,7 +47,8 @@ public class UserServiceImpl implements UserService{
 			op.get();
 			return "err";
 		} catch (Exception e) {
-				String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_AVATAR, request);
+				String imageURL="";
+//						upload.upload(file, Constants.FOLDER_IMAGE_AVATAR, request);
 				User user =mapperEntity.mapperUser(dto);
 				user.setAvatar(imageURL);
 				userRepos.save(user);

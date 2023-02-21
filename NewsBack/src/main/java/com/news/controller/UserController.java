@@ -1,4 +1,4 @@
-package com.news.controller.general;
+package com.news.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import com.news.service.UserService;
 
 @RestController
 @RequestMapping("/api/news/general")
-public class UserGeneralController {
+public class UserController {
 	@Autowired
 	UserService userService;
 	
