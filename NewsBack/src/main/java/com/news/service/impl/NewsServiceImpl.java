@@ -1,16 +1,18 @@
 package com.news.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.common.Constants;
@@ -19,7 +21,8 @@ import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
-import com.news.exception.ErrMessage;
+import com.news.exception.Error;
+import com.news.exception.MyException;
 import com.news.mapper.MapperDTO;
 import com.news.mapper.MapperEntity;
 import com.news.repos.CategoryRepos;
@@ -53,10 +56,7 @@ public class NewsServiceImpl implements NewsService{
 	 */
 	@Override
 	public NewsDTOResp findById(long id) {
-		News news=newsRepos.findById(id).orElse(null);
-		if(news==null) {
-			return null;
-		}
+		News news=newsRepos.findById(id).orElseThrow(()->new MyException(new Error( HttpStatus.NOT_FOUND,"Not found")));
 		NewsDTOResp dto=mapper.mapperNewsDTO(news);
 		return dto;
 	}
@@ -69,17 +69,13 @@ public class NewsServiceImpl implements NewsService{
 		return newsRepos.findAll();
 	}
 
+	@Transactional(rollbackFor = {SQLException.class})
 	@Override
-	public boolean saveNews(NewsDTOReq dto, MultipartFile file,ErrMessage errMessage,HttpServletRequest request) {		
+	public void saveNews(NewsDTOReq dto, MultipartFile file,HttpServletRequest request) {		
 		News news=mapperEntity.mapperNews(dto);
-		String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS,errMessage, request);
-		if(errMessage.getMsg()!=null&&!errMessage.getMsg().equals("")) {
-			return false;
-		}
+		String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
 		news.setImage(imageURL);
-		newsRepos.save(news);
-		return true;
-		
+		newsRepos.save(news);	
 	}
 
 	@Override
@@ -123,7 +119,7 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public List<News> getLatestNews(int num) {
 			
-		return null;
+		return newsRepos.getListLatestNews(num);
 	}
 
 	@Override

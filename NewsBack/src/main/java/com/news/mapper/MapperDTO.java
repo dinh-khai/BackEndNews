@@ -32,6 +32,8 @@ public class MapperDTO {
 		dto.setClassify(news.getClassify());
 		dto.setImage(news.getImage());
 		dto.setFeatured(news.isFeatured());
+		dto.setUserInsert(news.getUserInsert());
+		dto.setUserUpdate(news.getUserUpdate());
 		dto.setTimeInsert(news.getTimeInsert());
 		dto.setTineUpdate(news.getTimeUpdate());
 		int count=0;

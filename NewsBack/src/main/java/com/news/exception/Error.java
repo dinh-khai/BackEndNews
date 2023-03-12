@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ErrMessage {
+public class Error {
 	private HttpStatus httpStatus;
 	private String msg;
 }

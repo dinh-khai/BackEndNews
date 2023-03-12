@@ -59,11 +59,20 @@ public class User implements Serializable{
 	private boolean isAdmin;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "userCreator",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "userCreator",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private Set<Comment> listComments;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "userInsert",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private Set<News> listNewsCreate;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "userUpdate",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private Set<News> listNewsUpdate;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role",joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns = @JoinColumn(name="role_id"))
 	@EqualsAndHashCode.Exclude
 	private Set<Role> roles;
+	
 }

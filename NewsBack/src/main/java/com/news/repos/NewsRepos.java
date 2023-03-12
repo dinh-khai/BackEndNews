@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.news.entity.News;
@@ -39,6 +40,14 @@ public interface NewsRepos extends JpaRepository<News, Long> {
 //	get new news
 	@Query(value="select * from News n order by n.time DESC limit 6",nativeQuery = true)
 	List<News> listNewNews();
+	
+	/**
+	 * get list latest news
+	 * @param int num
+	 * @return list latest news
+	 */
+	@Query(value="select * from News n order by time_insert DESC limit ?",nativeQuery = true)
+	List<News> getListLatestNews(@Param("num") int num);
 	
 //	get list 6 news by category
 	@Query(value="select * from News n where category_id=? order by n.time DESC limit 6",nativeQuery = true)

@@ -67,6 +67,13 @@ public class News implements Serializable{
 	@OneToMany(mappedBy = "news",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Set<Comment> listComments;
 	
+	@ManyToOne
+	@JoinColumn(name="user_insert",nullable = false)
+	private User userInsert;
+	
+	@JoinColumn(name="user_update",nullable = false)
+	private User userUpdate;
+	
 	@Column(name="time_insert")
 	private Date timeInsert;
 	

@@ -12,7 +12,7 @@ import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
-import com.news.exception.ErrMessage;
+import com.news.exception.Error;
 
 public interface NewsService {
 
@@ -48,7 +48,7 @@ public interface NewsService {
 	 * @param request
 	 * @return news save
 	 */
-	boolean saveNews(NewsDTOReq dto, MultipartFile file,ErrMessage errMessage, HttpServletRequest request);
+	void saveNews(NewsDTOReq dto, MultipartFile file, HttpServletRequest request);
 
 	/**
 	 * update news

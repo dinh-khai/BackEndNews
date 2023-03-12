@@ -1,4 +1,6 @@
-package com.news.exception;
+package com.news.exception.customerException;
+
+import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,12 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MyException extends RuntimeException{
+public class FileException extends RuntimeException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Error err;
-
+	private HttpStatus httpStatus;
+	private String msg;
 }
