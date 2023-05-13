@@ -3,8 +3,15 @@ package com.news.common;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 
+ * @author khaidz
+ *@since 2023/01/01
+ *@version 1.0.0
+ *
+ */
 public class Utils {
-
+	
 	/**
 	 * Convert date to String
 	 * 
@@ -30,7 +37,8 @@ public class Utils {
 	 * @param arrExtentions
 	 * @return type of result
 	 */
-	public static boolean checkFileExtension(String fileName, String[] arrExtentions) {
+	public static boolean checkFileExtension(String fileName,
+											 String[] arrExtentions) {
 		if(fileName == null || fileName.equals("")) {
 			return false;
 		}
@@ -43,4 +51,5 @@ public class Utils {
 		}
 		return false;
 	}
+	
 }

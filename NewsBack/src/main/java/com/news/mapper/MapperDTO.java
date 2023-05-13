@@ -32,8 +32,8 @@ public class MapperDTO {
 		dto.setClassify(news.getClassify());
 		dto.setImage(news.getImage());
 		dto.setFeatured(news.isFeatured());
-		dto.setUserInsert(news.getUserInsert());
-		dto.setUserUpdate(news.getUserUpdate());
+//		dto.setUserInsert(news.getUserInsert());
+//		dto.setUserUpdate(news.getUserUpdate());
 		dto.setTimeInsert(news.getTimeInsert());
 		dto.setTineUpdate(news.getTimeUpdate());
 		int count=0;
@@ -53,7 +53,7 @@ public class MapperDTO {
 	 */
 	public UserDTOResp mapperUserDTO(User user) {
 		UserDTOResp dto =new UserDTOResp();
-		dto.setUserName(user.getUserName());
+		dto.setUserName(user.getUsername());
 		dto.setFullName(user.getFullName());
 		dto.setAvatar(user.getAvatar());
 		dto.setEmail(user.getEmail());

@@ -11,13 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MyException extends RuntimeException{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private HttpStatus status;
-	private String msg;
-
+public abstract class MyRuntimeException extends RuntimeException{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private HttpStatus status;
+    private String msg;
 }

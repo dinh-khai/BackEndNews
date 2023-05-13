@@ -2,7 +2,9 @@ package com.news.service.impl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,25 +18,35 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.common.Constants;
+import com.news.common.Utils;
 import com.news.dto.req.NewsDTOReq;
 import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
+import com.news.entity.User;
 import com.news.exception.Error;
 import com.news.exception.MyException;
+import com.news.exception.customException.NotFoundException;
 import com.news.mapper.MapperDTO;
 import com.news.mapper.MapperEntity;
 import com.news.repos.CategoryRepos;
 import com.news.repos.ClassifyRepos;
 import com.news.repos.NewsRepos;
+import com.news.repos.UserRepos;
 import com.news.service.NewsService;
 import com.news.service.UpLoadService;
+
+import ch.qos.logback.classic.pattern.Util;
+import net.bytebuddy.asm.Advice.Return;
 
 @Service
 public class NewsServiceImpl implements NewsService{
 	@Autowired
 	NewsRepos newsRepos;
+	
+	@Autowired
+	UserRepos userRepos;
 	
 	@Autowired
 	UpLoadService upload;
@@ -52,29 +64,50 @@ public class NewsServiceImpl implements NewsService{
 	MapperEntity mapperEntity;
 	
 	/**
+	 * find news by id
 	 * 
+	 * @param long id
+	 * @return NewsDTOResp
 	 */
 	@Override
 	public NewsDTOResp findById(long id) {
-		News news=newsRepos.findById(id).orElseThrow(()->new MyException(new Error( HttpStatus.NOT_FOUND,"Not found")));
+		News news=newsRepos.findById(id).orElseThrow(
+							()->new NotFoundException(
+									HttpStatus.NOT_FOUND,"User not found"
+									)
+						);
 		NewsDTOResp dto=mapper.mapperNewsDTO(news);
 		return dto;
 	}
 	
 	/**
-	 * o
+	 * find all news
+	 * 
+	 * @return List<NewsDTOResp>
 	 */
 	@Override
-	public List<News> findAll() {
-		return newsRepos.findAll();
+	public List<NewsDTOResp> findAll() {
+		List<News> listNews = newsRepos.findAll();
+		return null;
 	}
 
+	/**
+	 * save news
+	 * 
+	 * @param dto
+	 * @param file
+	 * @param request
+	 * @exception SQLException
+	 * @return
+	 */
 	@Transactional(rollbackFor = {SQLException.class})
 	@Override
-	public void saveNews(NewsDTOReq dto, MultipartFile file,HttpServletRequest request) {		
+	public void saveNews(NewsDTOReq dto, MultipartFile file,HttpServletRequest request) {	
 		News news=mapperEntity.mapperNews(dto);
 		String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
 		news.setImage(imageURL);
+		news.setUserInsert(Constants.USER_NAME_LOGIN);
+		news.setUserUpdate(Constants.USER_NAME_LOGIN);
 		newsRepos.save(news);	
 	}
 

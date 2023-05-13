@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -67,17 +69,18 @@ public class News implements Serializable{
 	@OneToMany(mappedBy = "news",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Set<Comment> listComments;
 	
-	@ManyToOne
-	@JoinColumn(name="user_insert",nullable = false)
-	private User userInsert;
+	@Column(name = "user_insert",length = 255,nullable = false)
+	private String userInsert;
 	
-	@JoinColumn(name="user_update",nullable = false)
-	private User userUpdate;
+	@Column(name = "user_update",length = 255,nullable = false)
+	private String userUpdate;
 	
-	@Column(name="time_insert")
+	@Column(name="time_insert",nullable = false)
+	@CreationTimestamp
 	private Date timeInsert;
 	
-	@Column(name="time_update")
+	@Column(name="time_update",nullable = false)
+	@CreationTimestamp
 	private Date timeUpdate;
 	
 }

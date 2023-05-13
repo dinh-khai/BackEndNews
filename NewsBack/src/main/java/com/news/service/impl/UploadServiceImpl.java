@@ -15,7 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.news.common.Constants;
 import com.news.common.Utils;
-import com.news.exception.customerException.FileException;
+import com.news.exception.customException.FileException;
 import com.news.service.UpLoadService;
 
 @Service
@@ -42,7 +42,7 @@ public class UploadServiceImpl implements UpLoadService {
 			baseUrl = ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build().toUriString();
 			dateFormat = "ddMMyyyy";
 			folderName = folderName + "/" + Utils.converDateToStr(dateFormat, new Date());
-			folderUrl = new ClassPathResource("/static").getFile().getAbsolutePath() + "/" + folderName;
+			folderUrl = new ClassPathResource("static").getFile().getAbsolutePath() + "/" + folderName;
 			folder = new File(folderUrl);
 			//if folder not exist
 			if (!folder.exists()) {

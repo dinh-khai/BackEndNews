@@ -29,7 +29,7 @@ public interface NewsService {
 	 * 
 	 * @return all news found
 	 */
-	List<News> findAll();
+	List<NewsDTOResp> findAll();
 
 	/**
 	 * find comments by news id

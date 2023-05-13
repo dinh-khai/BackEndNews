@@ -1,5 +1,7 @@
 package com.news.exception;
 
+import java.util.Date;
+
 import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Error {
-	private HttpStatus httpStatus;
+	private Date time;
+	private int status;
 	private String msg;
 }

@@ -1,4 +1,4 @@
-package com.news.exception.customerException;
+package com.news.exception.customException;
 
 import org.springframework.http.HttpStatus;
 

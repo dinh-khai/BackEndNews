@@ -91,7 +91,7 @@ public class MapperEntity {
 	 */
 	public User mapperUser(UserDTOReq dto) {
 		User user =new User();
-		user.setUserName(dto.getUserName());
+		user.setUsername(dto.getUserName());
 		user.setPassword(dto.getPassword());
 		user.setFullName(dto.getFullName());
 		user.setEmail(dto.getEmail());
