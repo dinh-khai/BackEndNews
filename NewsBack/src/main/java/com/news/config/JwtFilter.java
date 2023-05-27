@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,6 +27,9 @@ public class JwtFilter extends OncePerRequestFilter {
     JwtProvider token;
     @Autowired
     UserDetailsService userService;
+    @Autowired
+    PasswordEncoder pass;
+    
 
     /**
      * do fillter internal
@@ -40,7 +44,6 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
         String userName = token.getUserNameFromJWT(jwt);
         UserDetails userDetails = userService.loadUserByUsername(userName);
         if (userDetails != null) {

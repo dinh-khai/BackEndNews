@@ -1,5 +1,7 @@
 package com.news.mapper;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +50,7 @@ public class MapperEntity {
 		news.setClassify(classify);
 		news.setFeatured(dto.isFeatured());
 		news.setViews(0);
-		news.setTimeInsert(dto.getTimeInsert());
+		news.setTimeInsert(new Date());
 		return news;
 	}
 	

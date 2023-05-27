@@ -1,10 +1,15 @@
 package com.news.mapper;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.news.dto.resp.CategoryDTOResp;
 import com.news.dto.resp.CommentDTOResp;
 import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.ReCommentDTOResp;
@@ -12,12 +17,16 @@ import com.news.dto.resp.RoleDTOResp;
 import com.news.dto.resp.UserDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
+import com.news.entity.NewsCategory;
 import com.news.entity.ReComment;
 import com.news.entity.Role;
 import com.news.entity.User;
 
 @Component
 public class MapperDTO {
+    @Autowired
+    private ModelMapper mapper;
+    
 	/**
 	 * mapper news entity to news dto
 	 * @param news
@@ -111,4 +120,32 @@ public class MapperDTO {
 		dto.setName(role.getName());
 		return dto;
 	}
+	
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public List<CategoryDTOResp> mapperCategory(List<NewsCategory> list) {
+	    List<CategoryDTOResp> results = new ArrayList<>();
+	    for(NewsCategory category : list) {
+	        CategoryDTOResp dto = mapper.map(category, CategoryDTOResp.class);
+	        results.add(dto);
+	    }
+	    return results;
+	}
+	
+	/**
+     * 
+     * @param list
+     * @return
+     */
+    public List<NewsDTOResp> mapperNews(List<News> list) {
+        List<NewsDTOResp> results = new ArrayList<>();
+        for(News news: list) {
+            NewsDTOResp dto = mapper.map(news, NewsDTOResp.class);
+            results.add(dto);
+        }
+        return results;
+    }
 }

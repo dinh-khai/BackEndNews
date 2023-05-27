@@ -62,7 +62,7 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "userCreator",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private Set<Comment> listComments;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role",joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns = @JoinColumn(name="role_id"))
 	@EqualsAndHashCode.Exclude
 	private Set<Role> roles;

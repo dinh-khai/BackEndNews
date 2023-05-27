@@ -4,7 +4,12 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,9 +36,11 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	MapperEntity mapperEntity;
 	@Autowired
-	JwtProvider jwt;
+	JwtProvider jwtProvider;
 	@Autowired
 	JwtFilter filter;
+	@Autowired
+	AuthenticationManager auth;
 
 	/**
 	 * 
@@ -41,7 +48,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public String save(UserDTOReq dto,MultipartFile file,HttpServletRequest request) {
 		try {
-//			check username exist
+			//check username exist
 			Optional<User>op= userRepos.findById(dto.getUserName());
 			op.get();
 			return "err";
@@ -59,9 +66,18 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserDTOResp findById(HttpServletRequest request) {
 		String token=filter.getJwtFromRequest(request);
-		String userName=jwt.getUserNameFromJWT(token);
+		String userName=jwtProvider.getUserNameFromJWT(token);
 		UserDTOResp dto=mapperDTO.mapperUserDTO(userRepos.findById(userName).orElse(null));
 		return dto;
-	}	
+	}
+
+    @Override
+    public String login(String username, String password) {
+        Authentication authentication = auth.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        UserDetails userDetail = (UserDetails) authentication.getPrincipal();
+        String jwt = jwtProvider.createToken(userDetail);
+        return jwt;
+    }	
+	
 	
 }

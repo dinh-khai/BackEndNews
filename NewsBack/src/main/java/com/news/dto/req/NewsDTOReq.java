@@ -11,11 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class NewsDTOReq implements Serializable{
+public class NewsDTOReq implements Serializable {
 	private String title;
 	private String description;
 	private int categoryId;
 	private int classifyId;
 	private boolean featured;
-	private Date timeInsert;
 }

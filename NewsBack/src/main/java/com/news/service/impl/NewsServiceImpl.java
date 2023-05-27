@@ -88,7 +88,7 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public List<NewsDTOResp> findAll() {
 		List<News> listNews = newsRepos.findAll();
-		return null;
+		return mapper.mapperNews(listNews);
 	}
 
 	/**
@@ -104,7 +104,10 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public void saveNews(NewsDTOReq dto, MultipartFile file,HttpServletRequest request) {	
 		News news=mapperEntity.mapperNews(dto);
-		String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
+		String imageURL ="";
+		if(file.isEmpty()) {
+		    imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
+		}
 		news.setImage(imageURL);
 		news.setUserInsert(Constants.USER_NAME_LOGIN);
 		news.setUserUpdate(Constants.USER_NAME_LOGIN);
