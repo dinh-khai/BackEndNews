@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,6 +39,7 @@ public class User implements Serializable{
 
 	@Id
 	@Column(name="username")
+	@NotEmpty(message = "User name is empty")
 	private String username;
 	
 	@Column(name="avatar")

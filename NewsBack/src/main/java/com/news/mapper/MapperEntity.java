@@ -70,36 +70,4 @@ public class MapperEntity {
 		return cmt;
 	}
 	
-	/**
-	 * mapper re comment create to recomment entity
-	 * @param dto
-	 * @return
-	 */
-	public ReComment mapperReComment(ReCommentDTOReq dto) {
-		ReComment reComment=new ReComment();
-		User user=userRepos.findById(dto.getUserName()).orElse(null);
-		Comment comment=cmtRepos.findById(dto.getCmtId()).orElse(null);
-		reComment.setContent(dto.getDescription());
-		reComment.setCreatedTime(dto.getCreatedTime());
-		reComment.setUserCreator(user);
-		reComment.setComment(comment);
-		return reComment;
-	}
-	
-	/**
-	 * mapper user create dto to user entity
-	 * @param dto
-	 * @return
-	 */
-	public User mapperUser(UserDTOReq dto) {
-		User user =new User();
-		user.setUsername(dto.getUserName());
-		user.setPassword(dto.getPassword());
-		user.setFullName(dto.getFullName());
-		user.setEmail(dto.getEmail());
-		user.setCreatedTime(dto.getCreatedTime());
-		user.setAdmin(false);
-		return user;
-	}
-	
 }

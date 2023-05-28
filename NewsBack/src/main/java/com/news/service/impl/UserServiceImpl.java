@@ -1,23 +1,38 @@
 package com.news.service.impl;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
+import org.apache.catalina.mapper.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.news.config.JwtFilter;
 import com.news.config.JwtProvider;
 import com.news.dto.req.UserDTOReq;
 import com.news.dto.resp.UserDTOResp;
+import com.news.entity.Role;
 import com.news.entity.User;
+import com.news.exception.MyException;
 import com.news.mapper.MapperDTO;
 import com.news.mapper.MapperEntity;
 import com.news.repos.UserRepos;
@@ -34,50 +49,67 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	MapperDTO mapperDTO;
 	@Autowired
-	MapperEntity mapperEntity;
+	ModelMapper mapper;
 	@Autowired
 	JwtProvider jwtProvider;
 	@Autowired
 	JwtFilter filter;
 	@Autowired
 	AuthenticationManager auth;
+	
+	@Autowired
+	HttpServletRequest req;
+	
+	@Autowired
+	ObjectMapper objMapper;
+	@Autowired
+	PasswordEncoder encode;
 
 	/**
 	 * 
 	 */
 	@Override
-	public String save(UserDTOReq dto,MultipartFile file,HttpServletRequest request) {
-		try {
-			//check username exist
-			Optional<User>op= userRepos.findById(dto.getUserName());
-			op.get();
-			return "err";
-		} catch (Exception e) {
-				String imageURL="";
-//						upload.upload(file, Constants.FOLDER_IMAGE_AVATAR, request);
-				User user =mapperEntity.mapperUser(dto);
-				user.setAvatar(imageURL);
-				userRepos.save(user);
-			return "ok";
-		}
+	@Transactional
+	public void save(String dto,MultipartFile file,HttpServletRequest request) {
+		User user = new User();
+        try {
+            user = mapper.map(objMapper.readValue(dto, UserDTOReq.class), User.class);
+        } catch (JsonMappingException e) {
+            throw new MyException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        } catch (JsonProcessingException e) {
+            throw new MyException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+		Role role = new Role();
+		role.setId(2);
+		Set<Role> listRoles = new HashSet<>();
+		listRoles.add(role);
+		user.setCreatedTime(new Date());
+		user.setRoles(listRoles);
+		user.setPassword(encode.encode(user.getPassword()));
+		userRepos.save(user);
 	}
 
-//	get user from token
 	@Override
 	public UserDTOResp findById(HttpServletRequest request) {
-		String token=filter.getJwtFromRequest(request);
-		String userName=jwtProvider.getUserNameFromJWT(token);
-		UserDTOResp dto=mapperDTO.mapperUserDTO(userRepos.findById(userName).orElse(null));
+		String token = filter.getJwtFromRequest(request);
+		String userName = jwtProvider.getUserNameFromJWT(token);
+		UserDTOResp dto = mapperDTO.mapperUserDTO(userRepos.findById(userName).orElse(null));
 		return dto;
 	}
 
     @Override
-    public String login(String username, String password) {
+    public UserDTOResp login(String username, String password) {
         Authentication authentication = auth.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         UserDetails userDetail = (UserDetails) authentication.getPrincipal();
         String jwt = jwtProvider.createToken(userDetail);
-        return jwt;
+        User user = userRepos.findById(username).orElse(null);
+        UserDTOResp dto = mapper.map(user, UserDTOResp.class);
+        dto.setToken(jwt);
+        return dto;
     }	
 	
-	
+	private boolean validateUser(UserDTOReq dto) {
+	    
+	    return true;
+	}
 }

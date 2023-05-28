@@ -18,11 +18,12 @@ public class UserDTOResp implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String userName;
+	private String username;
 	private String fullName;
 	private String email;
 	private String avatar;
 	private boolean isAdmin;
 	private Date createdTime;
 	private Set<RoleDTOResp> roles;
+	private String token;
 }

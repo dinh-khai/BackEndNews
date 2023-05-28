@@ -62,7 +62,7 @@ public class MapperDTO {
 	 */
 	public UserDTOResp mapperUserDTO(User user) {
 		UserDTOResp dto =new UserDTOResp();
-		dto.setUserName(user.getUsername());
+		dto.setUsername(user.getUsername());
 		dto.setFullName(user.getFullName());
 		dto.setAvatar(user.getAvatar());
 		dto.setEmail(user.getEmail());

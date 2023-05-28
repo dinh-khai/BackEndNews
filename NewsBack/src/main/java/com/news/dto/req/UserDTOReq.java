@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @SuppressWarnings("serial")
 public class UserDTOReq implements Serializable{
-	private String userName;
+	private String username;
 	private String password;
 	private String fullName;
 	private String email;
-	private Date createdTime;
 }
