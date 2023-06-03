@@ -1,9 +1,11 @@
 package com.news.service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UpLoadService {
-	String upload(MultipartFile file,String forder,HttpServletRequest request);
+	String upload(MultipartFile file,String forder);
+	
+	InputStream getInputStream(String func, String date, String fileName);
 }

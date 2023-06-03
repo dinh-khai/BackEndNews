@@ -7,6 +7,6 @@ public interface CommentService {
 	
 	void saveComment(CommentDTOReq dto);
 	
-	PaginationDTOResp getCommentByNews(long id,int page);
+	PaginationDTOResp getCommentByNews(long id,int page, int limit);
 
 }

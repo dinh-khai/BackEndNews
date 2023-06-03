@@ -101,5 +101,9 @@ public interface NewsService {
 	void updateView(long id);
 
 //	get news by category and pagination
-	PaginationDTOResp getNewsByCategory(int page, int categoryId);
+	PaginationDTOResp pagination(int page, int id, int limit ,String sort ,String sortBy ,String field);
+	
+	List<NewsDTOResp> getListNews(int page, int limit, String sortType, String sortBy);
+	
+	List<NewsDTOResp> getListNewsByFeatured(int page, int limit);
 }

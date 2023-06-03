@@ -10,19 +10,24 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.hibernate.engine.jdbc.StreamUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.news.dto.resp.NewsDTOResp;
+import com.news.dto.resp.PaginationDTOResp;
 import com.news.entity.News;
 import com.news.exception.MyException;
+import com.news.service.CommentService;
 import com.news.service.NewsService;
 
 @RestController
@@ -32,24 +37,27 @@ public class NewsController {
 	@Autowired 
 	NewsService newsService;
 	@Autowired
+	CommentService cmtService;
+	@Autowired
 	ServletContext context;
 	
-	@GetMapping("")
-	public ResponseEntity<List<NewsDTOResp>>  findAll(){
-		return new ResponseEntity<List<NewsDTOResp>>(newsService.findAll(),HttpStatus.OK);
-	}
-	
-	@GetMapping("/{id}")
+	@GetMapping("{id}")
 	public ResponseEntity<NewsDTOResp> findById(@PathVariable long id) {
 		return new ResponseEntity<NewsDTOResp>(newsService.findById(id),HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/image")
-	public String getImage(HttpServletResponse response) throws IOException {
-////	    InputStream in = context.getResourceAsStream("F://Image/IMG_20221230_183913.jpg");
-//	    InputStream in = new FileInputStream(new File("F://Image/IMG_20221230_183913.jpg"));
-//	    IOUtils.copy(in, response.getOutputStream());
-	    File file = new File("/");
-	    return file.getAbsolutePath();
+	@GetMapping("{id}/comments")
+	public ResponseEntity<PaginationDTOResp> getCommentOfNews(@PathVariable long id, @RequestParam int page, @RequestParam int limit) {
+	    return new ResponseEntity<PaginationDTOResp>(cmtService.getCommentByNews(id, page, limit), HttpStatus.OK);
+	}
+	
+	@GetMapping
+    public ResponseEntity<List<NewsDTOResp>> getNews(@RequestParam int page, @RequestParam int limit, @RequestParam(required = false) String sortType, @RequestParam(required = false) String sortBy) {
+        return new ResponseEntity<List<NewsDTOResp>>(newsService.getListNews(page, limit, sortType, sortBy), HttpStatus.OK);
+    }
+	
+	@GetMapping("featured")
+	public ResponseEntity<List<NewsDTOResp>> getNewsByFetured(@RequestParam int page, @RequestParam int limit) {
+	    return new ResponseEntity<List<NewsDTOResp>>(newsService.getListNewsByFeatured(page, limit), HttpStatus.OK);
 	}
 }

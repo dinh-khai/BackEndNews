@@ -30,8 +30,8 @@ public interface NewsRepos extends JpaRepository<News, Long> {
 	@Query(value="select * from News n where n.featured=true order by n.time DESC limit 4",nativeQuery = true)
 	List<News> mostFeatured();
 	
-	@Query(value="select * from News n where n.featured=true limit 2",nativeQuery = true)
-	News secondFeatured();
+	@Query(value="select n from News n where n.featured=true")
+	Page<News> getNewsByFeatured(Pageable pageable);
 	
 	@Query(value="select * from News n where n.featured=true limit 1,2",nativeQuery = true)
 	List<News> otherFeatured();
@@ -73,6 +73,9 @@ public interface NewsRepos extends JpaRepository<News, Long> {
 	
 //	get all news by category and pagination
 	Page<News> findAllByCategoryId(int id,Pageable pageable);
+	
+	// get all news by category and pagination
+    Page<News> findAllByClassifyId(int id,Pageable pageable);
 	
 	
 }

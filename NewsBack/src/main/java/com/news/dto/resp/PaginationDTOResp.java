@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PaginationDTOResp implements Serializable{
-	public static final int size=1;
 	private int totalPages;
 	private int currentPage;
 	private List<?> list;

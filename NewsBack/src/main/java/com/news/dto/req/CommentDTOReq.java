@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class CommentDTOReq implements Serializable{
 	private String description;
 	private Date createdTime;
-	private String userName;
+	private String username;
 	private long newsId;
 }

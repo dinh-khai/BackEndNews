@@ -20,6 +20,7 @@ public class NewsDTOResp implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private long id;
 	private String title;
+	private String shortDescription;
 	private String description;
 	private String image;
 	private Date timeInsert;

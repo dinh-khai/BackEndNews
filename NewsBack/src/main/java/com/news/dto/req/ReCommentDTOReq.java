@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class ReCommentDTOReq implements Serializable{
 	private String description;
 	private Date createdTime;
-	private String userName;
+	private String username;
 	private long cmtId;
 }

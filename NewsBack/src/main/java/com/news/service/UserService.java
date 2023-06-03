@@ -11,7 +11,7 @@ public interface UserService {
 
 	UserDTOResp findById(HttpServletRequest request);
 
-	void save(String dto,MultipartFile file,HttpServletRequest request);
+	void save(String dto,MultipartFile file);
 	
 	UserDTOResp login(String username, String password);
 }

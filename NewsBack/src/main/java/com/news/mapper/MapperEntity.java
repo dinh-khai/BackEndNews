@@ -3,6 +3,7 @@ package com.news.mapper;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.news.dto.req.CommentDTOReq;
@@ -15,6 +16,7 @@ import com.news.entity.NewsCategory;
 import com.news.entity.NewsClassification;
 import com.news.entity.ReComment;
 import com.news.entity.User;
+import com.news.exception.MyException;
 import com.news.repos.CategoryRepos;
 import com.news.repos.ClassifyRepos;
 import com.news.repos.CommentRepos;
@@ -45,6 +47,7 @@ public class MapperEntity {
 		NewsCategory category=cateRepos.findById(dto.getCategoryId()).orElse(null);
 		NewsClassification classify=classifyRepos.findById(dto.getClassifyId()).orElse(null);
 		news.setTitle(dto.getTitle());
+		news.setShortDescription(dto.getShortDescription());
 		news.setDescription(dto.getDescription());
 		news.setCategory(category);
 		news.setClassify(classify);
@@ -61,7 +64,7 @@ public class MapperEntity {
 	 */
 	public Comment mapperComment(CommentDTOReq dto) {
 		Comment cmt = new Comment();
-		User user=userRepos.findById(dto.getUserName()).orElse(null);
+		User user=userRepos.findById(dto.getUsername()).orElse(null);
 		News news =newsRepos.findById(dto.getNewsId()).orElse(null);
 		cmt.setContent(dto.getDescription());
 		cmt.setCreatedTime(dto.getCreatedTime());
@@ -69,5 +72,16 @@ public class MapperEntity {
 		cmt.setNews(news);
 		return cmt;
 	}
+	
+	public ReComment mapperReComment(ReCommentDTOReq dto) {
+        ReComment cmt = new ReComment();
+        User user = userRepos.findById(dto.getUsername()).orElseThrow(()->new MyException(HttpStatus.NOT_FOUND, "Không tìm thấy username"));
+        Comment comment = cmtRepos.findById(dto.getCmtId()).orElseThrow(()->new MyException(HttpStatus.NOT_FOUND, "Không tìm thấy tin tức"));
+        cmt.setContent(dto.getDescription());
+        cmt.setCreatedTime(new Date());
+        cmt.setUserCreator(user);
+        cmt.setComment(comment);
+        return cmt;
+    }
 	
 }

@@ -29,9 +29,9 @@ public class ReCommentServiceImpl implements ReCommentService{
 //	save recomment
 	@Override
 	public void saveReComemnt(ReCommentDTOReq dto) {
-//		ReComment re=mapperEntity.mapperReComment(dto);
-//		reRepos.save(re);
-//		return;
+		ReComment re = mapperEntity.mapperReComment(dto);
+		reRepos.save(re);
+		return;
 		
 	}
 

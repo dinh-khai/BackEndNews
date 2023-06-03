@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.news.common.Constants;
 import com.news.config.JwtFilter;
 import com.news.config.JwtProvider;
 import com.news.dto.req.UserDTOReq;
@@ -70,10 +71,18 @@ public class UserServiceImpl implements UserService{
 	 */
 	@Override
 	@Transactional
-	public void save(String dto,MultipartFile file,HttpServletRequest request) {
+	public void save(String dto,MultipartFile file) {
 		User user = new User();
         try {
-            user = mapper.map(objMapper.readValue(dto, UserDTOReq.class), User.class);
+            UserDTOReq userDto = objMapper.readValue(dto, UserDTOReq.class);
+            boolean validate = validateUser(userDto);
+            if (!validate) {
+                throw new MyException(HttpStatus.INTERNAL_SERVER_ERROR, "Username đã được đăng ký");
+            }
+            
+            user = mapper.map(userDto, User.class);
+            String img = upload.upload(file, Constants.FOLDER_IMAGE_AVATAR);
+            user.setAvatar(img);
         } catch (JsonMappingException e) {
             throw new MyException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (JsonProcessingException e) {
@@ -109,7 +118,10 @@ public class UserServiceImpl implements UserService{
     }	
 	
 	private boolean validateUser(UserDTOReq dto) {
-	    
+	    User user = userRepos.findById(dto.getUsername()).orElse(null);
+	    if (user != null) {
+            return false;
+        }
 	    return true;
 	}
 }
