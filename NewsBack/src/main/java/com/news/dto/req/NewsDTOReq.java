@@ -16,4 +16,5 @@ public class NewsDTOReq implements Serializable {
 	private int categoryId;
 	private int classifyId;
 	private boolean featured;
+	private String username;
 }

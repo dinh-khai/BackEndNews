@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.news.dto.req.CommentDTOReq;
 import com.news.dto.req.NewsDTOReq;
 import com.news.dto.req.ReCommentDTOReq;
-import com.news.dto.req.UserDTOReq;
 import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.entity.NewsCategory;
@@ -42,18 +41,18 @@ public class MapperEntity {
 	 * @param dto
 	 * @return
 	 */
-	public News mapperNews(NewsDTOReq dto) {
-		News news =new News();
-		NewsCategory category=cateRepos.findById(dto.getCategoryId()).orElse(null);
-		NewsClassification classify=classifyRepos.findById(dto.getClassifyId()).orElse(null);
+	public News mapperNews(NewsDTOReq dto, News news) {
+		if (news == null) {
+            news = new News();
+        }
+		NewsCategory category = cateRepos.findById(dto.getCategoryId()).orElse(null);
+		NewsClassification classify = classifyRepos.findById(dto.getClassifyId()).orElse(null);
 		news.setTitle(dto.getTitle());
 		news.setShortDescription(dto.getShortDescription());
 		news.setDescription(dto.getDescription());
 		news.setCategory(category);
 		news.setClassify(classify);
 		news.setFeatured(dto.isFeatured());
-		news.setViews(0);
-		news.setTimeInsert(new Date());
 		return news;
 	}
 	

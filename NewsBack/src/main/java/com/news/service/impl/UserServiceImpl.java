@@ -2,16 +2,10 @@ package com.news.service.impl;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-
-import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
-import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +29,6 @@ import com.news.entity.Role;
 import com.news.entity.User;
 import com.news.exception.MyException;
 import com.news.mapper.MapperDTO;
-import com.news.mapper.MapperEntity;
 import com.news.repos.UserRepos;
 import com.news.service.UpLoadService;
 import com.news.service.UserService;

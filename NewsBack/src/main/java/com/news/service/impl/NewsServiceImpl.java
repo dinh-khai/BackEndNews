@@ -1,10 +1,9 @@
 package com.news.service.impl;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +18,8 @@ import com.news.common.Constants;
 import com.news.dto.req.NewsDTOReq;
 import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.PaginationDTOResp;
-import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.exception.MyException;
-import com.news.exception.customException.NotFoundException;
 import com.news.mapper.MapperDTO;
 import com.news.mapper.MapperEntity;
 import com.news.repos.CategoryRepos;
@@ -64,7 +61,7 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public NewsDTOResp findById(long id) {
 		News news=newsRepos.findById(id).orElseThrow(
-							()->new NotFoundException(
+							()->new MyException(
 									HttpStatus.NOT_FOUND,"User not found"
 									)
 						);
@@ -94,75 +91,44 @@ public class NewsServiceImpl implements NewsService{
 	 */
 	@Transactional(rollbackFor = {SQLException.class})
 	@Override
-	public void saveNews(NewsDTOReq dto, MultipartFile file,HttpServletRequest request) {	
-		News news=mapperEntity.mapperNews(dto);
+	public void saveNews(NewsDTOReq dto, MultipartFile file) {	
+		News news = mapperEntity.mapperNews(dto, null);
 		String imageURL ="";
 		if(file != null && !file.isEmpty()) {
 		    imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS);
 		}
 		news.setImage(imageURL);
-		news.setUserInsert(Constants.USER_NAME_LOGIN);
-		news.setUserUpdate(Constants.USER_NAME_LOGIN);
+		news.setViews(0);
+		news.setUserInsert(dto.getUsername());
+		news.setUserUpdate(dto.getUsername());
+		news.setTimeInsert(new Date());
+		news.setTimeUpdate(new Date());
 		newsRepos.save(news);	
 	}
 
+	@Transactional(rollbackFor = {SQLException.class})
 	@Override
-	public void updateNews(long id, NewsDTOReq dto,MultipartFile file,HttpServletRequest request) {
-//		News news = newsRepos.findById(id).orElse(null);
-//		if(news!=null) {
-//			String imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS, request);
-//			news=mapperEntity.mapperNews(dto);
-//			news.setImage(imageURL);
-//		}
-//		newsRepos.save(news);
+	public void updateNews(long id, NewsDTOReq dto,MultipartFile file) {
+		News news = newsRepos.findById(id).orElseThrow(()->new MyException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Không tìm thấy tin tức của id : %s", id)));
+		String imageURL = "";
+		if(news!=null) {
+			if(file != null && !file.isEmpty()) {
+	            imageURL=upload.upload(file, Constants.FOLDER_IMAGE_NEWS);
+	        }
+			news = mapperEntity.mapperNews(dto, news);
+			news.setId(id);
+			news.setImage(imageURL);
+			news.setUserUpdate(dto.getUsername());
+			news.setTimeUpdate(new Date());
+		}
+		newsRepos.save(news);
 	}
 
 	@Override
 	public void deleteNews(long id) {
-		newsRepos.delete(newsRepos.findById(id).orElse(null));
+		newsRepos.delete(newsRepos.findById(id).orElseThrow(
+		        ()->new MyException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Không tìm thấy news của id : %s", id))));
 		return;	
-	}
-
-	@Override
-	public Set<Comment> listComment(long id) {
-		return newsRepos.findById(id).orElse(null).getListComments();
-	}
-
-	@Override
-	public List<News> mostFeatured() {		
-		return newsRepos.mostFeatured();
-	}
-
-	@Override
-	public List<News> mostNews() {
-		return newsRepos.listNewNews();
-	}
-	
-	/**
-	 * get latest news
-	 * 
-	 * @param num
-	 * @return list news latest
-	 */
-	@Override
-	public List<News> getLatestNews(int num) {
-			
-		return newsRepos.getListLatestNews(num);
-	}
-
-	@Override
-	public List<News> listTop6NewsByCate(int id) {
-		return newsRepos.listTop6NewsByCate(id);
-	}
-
-	@Override
-	public List<News> listTop4NewsByClassify(int id) {
-		return newsRepos.listTop4NewsByClassify(id);
-	}
-
-	@Override
-	public List<News> mostViews() {
-		return newsRepos.mostViews();
 	}
 
 	@Override
@@ -202,7 +168,7 @@ public class NewsServiceImpl implements NewsService{
 	}
 	
 	@Override
-	public List<NewsDTOResp> getListNews(int page, int limit, String sortType, String sortBy) {
+	public PaginationDTOResp getListNews(int page, int limit, String sortType, String sortBy) {
 	    Page<News> paging = null;
         Sort sort = null;
         if (sortBy == null) {
@@ -218,17 +184,28 @@ public class NewsServiceImpl implements NewsService{
 	    Pageable pageble = PageRequest.of(page, limit, sort);
         paging = newsRepos.findAll(pageble);
 	    List<NewsDTOResp> list = mapper.mapperNews(paging.getContent());
-	    return list;
+	    PaginationDTOResp dto = new PaginationDTOResp(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
+	    return dto;
 	}
 	
 	@Override
 	public List<NewsDTOResp> getListNewsByFeatured(int page, int limit) {
+        Sort sort = Sort.by("id").descending();
+        Pageable pageble = PageRequest.of(page, limit, sort);
+        Page<News> paging = newsRepos.getNewsByFeatured(pageble);
+        List<NewsDTOResp> list = mapper.mapperNews(paging.getContent());
+        return list;
+    }
+	
+	@Override
+    public PaginationDTOResp search(String q, int page, int limit) {
         Page<News> paging = null;
         Sort sort = Sort.by("id").descending();
         Pageable pageble = PageRequest.of(page, limit, sort);
-        paging = newsRepos.findAll(pageble);
+        paging = newsRepos.search(q, pageble);
         List<NewsDTOResp> list = mapper.mapperNews(paging.getContent());
-        return list;
+        PaginationDTOResp dto = new PaginationDTOResp(paging.getTotalPages(),paging.getNumber(),list,paging.isFirst(),paging.isLast());
+        return dto;
     }
 
 }

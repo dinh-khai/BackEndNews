@@ -1,7 +1,7 @@
 package com.news;
+
 import java.util.Date;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -11,11 +11,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.news.entity.Role;
 import com.news.entity.User;
 import com.news.repos.UserRepos;
-import com.news.service.UserService;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class NewsBackApplication {
