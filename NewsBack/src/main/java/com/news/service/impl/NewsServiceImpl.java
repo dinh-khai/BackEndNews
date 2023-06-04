@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.news.common.Constants;
@@ -52,6 +54,9 @@ public class NewsServiceImpl implements NewsService{
 	@Autowired
 	MapperEntity mapperEntity;
 	
+	@Autowired
+	ModelMapper map;
+	
 	/**
 	 * find news by id
 	 * 
@@ -65,7 +70,7 @@ public class NewsServiceImpl implements NewsService{
 									HttpStatus.NOT_FOUND,"User not found"
 									)
 						);
-		NewsDTOResp dto=mapper.mapperNewsDTO(news);
+		NewsDTOResp dto=map.map(news, NewsDTOResp.class);
 		return dto;
 	}
 	
@@ -124,6 +129,7 @@ public class NewsServiceImpl implements NewsService{
 		newsRepos.save(news);
 	}
 
+	@Transactional(rollbackFor = {SQLException.class})
 	@Override
 	public void deleteNews(long id) {
 		newsRepos.delete(newsRepos.findById(id).orElseThrow(
@@ -131,9 +137,12 @@ public class NewsServiceImpl implements NewsService{
 		return;	
 	}
 
+	@Transactional(rollbackFor = {SQLException.class})
 	@Override
 	public void updateView(long id) {
-		newsRepos.updateView(id);
+		News news = newsRepos.findById(id).orElseThrow(()->new MyException(HttpStatus.NOT_FOUND, String.format("Không tìm thấy tin tức của id : %s", id)));
+		news.setViews(news.getViews() + 1);
+		newsRepos.save(news);
 		return;	
 	}
 

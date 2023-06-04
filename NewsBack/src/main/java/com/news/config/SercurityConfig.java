@@ -3,6 +3,7 @@ package com.news.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -52,7 +53,11 @@ public class SercurityConfig extends WebSecurityConfigurerAdapter{
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-//                .antMatchers(HttpMethod.POST,"/**/news/**" ).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/**/news/**" ).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/**/news/**" ).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/**/news/**" ).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/**/comments/**" ).hasAuthority("USER")
+                .antMatchers(HttpMethod.POST,"/**/recomments/**" ).hasAuthority("USER")
                 .anyRequest().permitAll();
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }

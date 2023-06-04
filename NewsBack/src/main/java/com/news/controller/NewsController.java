@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,4 +54,11 @@ public class NewsController {
     public ResponseEntity<PaginationDTOResp> search(@RequestParam String q, @RequestParam int page, @RequestParam int limit) {
         return new ResponseEntity<PaginationDTOResp>(newsService.search(q, page, limit), HttpStatus.OK);
     }
+	
+	@PutMapping("views")
+	public ResponseEntity<String> updateViews(@RequestParam long id) {
+	    newsService.updateView(id);
+	    return new ResponseEntity<String>("", HttpStatus.OK);
+	}
+	
 }

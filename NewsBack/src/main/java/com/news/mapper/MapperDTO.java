@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.news.dto.resp.CategoryDTOResp;
+import com.news.dto.resp.ClassifyDTOResp;
 import com.news.dto.resp.CommentDTOResp;
 import com.news.dto.resp.NewsDTOResp;
 import com.news.dto.resp.ReCommentDTOResp;
@@ -18,6 +19,7 @@ import com.news.dto.resp.UserDTOResp;
 import com.news.entity.Comment;
 import com.news.entity.News;
 import com.news.entity.NewsCategory;
+import com.news.entity.NewsClassification;
 import com.news.entity.ReComment;
 import com.news.entity.Role;
 import com.news.entity.User;
@@ -134,6 +136,15 @@ public class MapperDTO {
 	    }
 	    return results;
 	}
+	
+	public List<ClassifyDTOResp> mapperClassify(List<NewsClassification> list) {
+        List<ClassifyDTOResp> results = new ArrayList<>();
+        for(NewsClassification classify : list) {
+            ClassifyDTOResp dto = mapper.map(classify, ClassifyDTOResp.class);
+            results.add(dto);
+        }
+        return results;
+    }
 	
 	/**
      * 

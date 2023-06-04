@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import com.news.entity.NewsCategory;
 import com.news.entity.NewsClassification;
-import com.news.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +29,6 @@ public class NewsDTOResp implements Serializable{
 	private int numberOfComment;
 	private boolean featured;
 	private int views;
-	private User userInsert;
-	private User userUpdate;
+	private String userInsert;
+	private String userUpdate;
 }

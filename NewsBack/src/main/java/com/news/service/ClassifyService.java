@@ -2,10 +2,10 @@ package com.news.service;
 
 import java.util.List;
 
-import com.news.entity.NewsClassification;
+import com.news.dto.resp.ClassifyDTOResp;
 
 public interface ClassifyService {
 
-	List<NewsClassification> findAll();
+	List<ClassifyDTOResp> findAll();
 
 }

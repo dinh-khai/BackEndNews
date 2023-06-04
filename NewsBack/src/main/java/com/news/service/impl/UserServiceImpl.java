@@ -101,13 +101,18 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDTOResp login(String username, String password) {
-        Authentication authentication = auth.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        UserDetails userDetail = (UserDetails) authentication.getPrincipal();
-        String jwt = jwtProvider.createToken(userDetail);
-        User user = userRepos.findById(username).orElse(null);
-        UserDTOResp dto = mapper.map(user, UserDTOResp.class);
-        dto.setToken(jwt);
-        return dto;
+        try {
+            
+            Authentication authentication = auth.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            UserDetails userDetail = (UserDetails) authentication.getPrincipal();
+            String jwt = jwtProvider.createToken(userDetail);
+            User user = userRepos.findById(username).orElse(null);
+            UserDTOResp dto = mapper.map(user, UserDTOResp.class);
+            dto.setToken(jwt);
+            return dto;
+        } catch (Exception e) {
+            throw new MyException(HttpStatus.UNAUTHORIZED, "not");
+        }
     }	
 	
 	private boolean validateUser(UserDTOReq dto) {
