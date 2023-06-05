@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService{
             UserDTOReq userDto = objMapper.readValue(dto, UserDTOReq.class);
             boolean validate = validateUser(userDto);
             if (!validate) {
-                throw new MyException(HttpStatus.INTERNAL_SERVER_ERROR, "Username đã được đăng ký");
+                throw new MyException(HttpStatus.INTERNAL_SERVER_ERROR, String.format("Tên đăng nhập : %s đã được đăng ký", userDto.getUsername()));
             }
             
             user = mapper.map(userDto, User.class);
@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService{
         }
 		Role role = new Role();
 		role.setId(2);
+		role.setName("USER");
 		Set<Role> listRoles = new HashSet<>();
 		listRoles.add(role);
 		user.setCreatedTime(new Date());
